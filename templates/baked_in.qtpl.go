@@ -125,7 +125,7 @@ func StreamHasValue(qw422016 *qt422016.Writer, s *validator.StructData, field *v
 	StreamHasValueValidation(qw422016, s, field)
 //line baked_in.qtpl:38
 	qw422016.N().S(`)() {
-		verr = append(verr, validator.NewFieldError(validator.ErrRequired, "`)
+		verr = append(verr, validator.NewFieldError(validator.ErrRequired, "required", "`)
 //line baked_in.qtpl:39
 	qw422016.E().J(field.Identifier)
 //line baked_in.qtpl:39
@@ -296,7 +296,7 @@ func StreamGte(qw422016 *qt422016.Writer, s *validator.StructData, field *valida
 	StreamNumberValidation(qw422016, s, field, validation, ">=")
 //line baked_in.qtpl:69
 	qw422016.N().S(`)() {
-		verr = append(verr, validator.NewFieldError(validator.ErrIsDefault, "`)
+		verr = append(verr, validator.NewFieldError(validator.ErrIsDefault, "gte", "`)
 //line baked_in.qtpl:70
 	qw422016.E().J(field.Identifier)
 //line baked_in.qtpl:70
@@ -344,7 +344,7 @@ func StreamLte(qw422016 *qt422016.Writer, s *validator.StructData, field *valida
 	StreamNumberValidation(qw422016, s, field, validation, "<=")
 //line baked_in.qtpl:75
 	qw422016.N().S(`)() {
-		verr = append(verr, validator.NewFieldError(validator.ErrIsDefault, "`)
+		verr = append(verr, validator.NewFieldError(validator.ErrIsDefault, "lte", "`)
 //line baked_in.qtpl:76
 	qw422016.E().J(field.Identifier)
 //line baked_in.qtpl:76
@@ -457,12 +457,12 @@ func RegexValidation(s *validator.StructData, field *validator.FieldData, valida
 //line baked_in.qtpl:99
 func StreamEmail(qw422016 *qt422016.Writer, s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData) {
 //line baked_in.qtpl:99
-	qw422016.N().S(`	if (`)
+	qw422016.N().S(`	if !(`)
 //line baked_in.qtpl:100
 	StreamRegexValidation(qw422016, s, field, validation, "validator.EmailRegex")
 //line baked_in.qtpl:100
 	qw422016.N().S(`)() {
-		verr = append(verr, validator.NewFieldError(validator.ErrIsDefault, "`)
+		verr = append(verr, validator.NewFieldError(validator.ErrIsDefault, "email", "`)
 //line baked_in.qtpl:101
 	qw422016.E().J(field.Identifier)
 //line baked_in.qtpl:101
@@ -505,12 +505,12 @@ func Email(s *validator.StructData, field *validator.FieldData, validation *vali
 //line baked_in.qtpl:105
 func StreamHexcolor(qw422016 *qt422016.Writer, s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData) {
 //line baked_in.qtpl:105
-	qw422016.N().S(`	if (`)
+	qw422016.N().S(`	if !(`)
 //line baked_in.qtpl:106
 	StreamRegexValidation(qw422016, s, field, validation, "validator.HexcolorRegex")
 //line baked_in.qtpl:106
 	qw422016.N().S(`)() {
-		verr = append(verr, validator.NewFieldError(validator.ErrIsDefault, "`)
+		verr = append(verr, validator.NewFieldError(validator.ErrIsDefault, "hexcolor", "`)
 //line baked_in.qtpl:107
 	qw422016.E().J(field.Identifier)
 //line baked_in.qtpl:107
@@ -553,12 +553,12 @@ func Hexcolor(s *validator.StructData, field *validator.FieldData, validation *v
 //line baked_in.qtpl:111
 func StreamRGBa(qw422016 *qt422016.Writer, s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData) {
 //line baked_in.qtpl:111
-	qw422016.N().S(`	if (`)
+	qw422016.N().S(`	if !(`)
 //line baked_in.qtpl:112
 	StreamRegexValidation(qw422016, s, field, validation, "validator.RgbaRegex")
 //line baked_in.qtpl:112
 	qw422016.N().S(`)() {
-		verr = append(verr, validator.NewFieldError(validator.ErrIsDefault, "`)
+		verr = append(verr, validator.NewFieldError(validator.ErrIsDefault, "rgba", "`)
 //line baked_in.qtpl:113
 	qw422016.E().J(field.Identifier)
 //line baked_in.qtpl:113
@@ -601,12 +601,12 @@ func RGBa(s *validator.StructData, field *validator.FieldData, validation *valid
 //line baked_in.qtpl:117
 func StreamRGB(qw422016 *qt422016.Writer, s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData) {
 //line baked_in.qtpl:117
-	qw422016.N().S(`	if (`)
+	qw422016.N().S(`	if !(`)
 //line baked_in.qtpl:118
 	StreamRegexValidation(qw422016, s, field, validation, "validator.RgbRegex")
 //line baked_in.qtpl:118
 	qw422016.N().S(`)() {
-		verr = append(verr, validator.NewFieldError(validator.ErrIsDefault, "`)
+		verr = append(verr, validator.NewFieldError(validator.ErrIsDefault, "rgb", "`)
 //line baked_in.qtpl:119
 	qw422016.E().J(field.Identifier)
 //line baked_in.qtpl:119

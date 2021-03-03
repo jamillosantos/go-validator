@@ -4,19 +4,25 @@ import "github.com/pkg/errors"
 
 type FieldError struct {
 	Field string
+	Rule  string
 	Value interface{}
 	err   error
 }
 
-func NewFieldError(err error, field string, value interface{}) *FieldError {
+func NewFieldError(err error, rule, field string, value interface{}) *FieldError {
 	return &FieldError{
 		Field: field,
+		Rule:  rule,
 		Value: value,
 		err:   err,
 	}
 }
 
 type ValidationErrors []*FieldError
+
+func (err ValidationErrors) Error() string {
+	return "validator error"
+}
 
 func (err *FieldError) Unwrap() error {
 	return err.err

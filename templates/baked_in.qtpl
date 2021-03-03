@@ -36,7 +36,7 @@ if field.IsString {
 
 {% func HasValue(s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData) -%}
 	if !({%= HasValueValidation(s, field)%})() {
-		verr = append(verr, validator.NewFieldError(validator.ErrRequired, "{%j field.Identifier %}", v.{%s field.Name %}))
+		verr = append(verr, validator.NewFieldError(validator.ErrRequired, "required", "{%j field.Identifier %}", v.{%s field.Name %}))
 	}
 {%- endfunc %}
 
@@ -67,13 +67,13 @@ if field.IsPointer {
 
 {% func Gte(s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData) -%}
 	if ({%= NumberValidation(s, field, validation, ">=") -%})() {
-		verr = append(verr, validator.NewFieldError(validator.ErrIsDefault, "{%j field.Identifier %}", v.{%s field.Name %}))
+		verr = append(verr, validator.NewFieldError(validator.ErrIsDefault, "gte", "{%j field.Identifier %}", v.{%s field.Name %}))
 	}
 {%- endfunc %}
 
 {% func Lte(s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData) -%}
 	if ({%= NumberValidation(s, field, validation, "<=") -%})() {
-		verr = append(verr, validator.NewFieldError(validator.ErrIsDefault, "{%j field.Identifier %}", v.{%s field.Name %}))
+		verr = append(verr, validator.NewFieldError(validator.ErrIsDefault, "lte", "{%j field.Identifier %}", v.{%s field.Name %}))
 	}
 {%- endfunc %}
 
@@ -97,25 +97,25 @@ if field.IsPointer {
 }{%- endfunc %}
 
 {% func Email(s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData) -%}
-	if ({%= RegexValidation(s, field, validation, "validator.EmailRegex")%})() {
-		verr = append(verr, validator.NewFieldError(validator.ErrIsDefault, "{%j field.Identifier %}", v.{%s field.Name %}))
+	if !({%= RegexValidation(s, field, validation, "validator.EmailRegex")%})() {
+		verr = append(verr, validator.NewFieldError(validator.ErrIsDefault, "email", "{%j field.Identifier %}", v.{%s field.Name %}))
 	}
 {%- endfunc %}
 
 {% func Hexcolor(s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData) -%}
-	if ({%= RegexValidation(s, field, validation, "validator.HexcolorRegex")%})() {
-		verr = append(verr, validator.NewFieldError(validator.ErrIsDefault, "{%j field.Identifier %}", v.{%s field.Name %}))
+	if !({%= RegexValidation(s, field, validation, "validator.HexcolorRegex")%})() {
+		verr = append(verr, validator.NewFieldError(validator.ErrIsDefault, "hexcolor", "{%j field.Identifier %}", v.{%s field.Name %}))
 	}
 {%- endfunc %}
 
 {% func RGBa(s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData) -%}
-	if ({%= RegexValidation(s, field, validation, "validator.RgbaRegex")%})() {
-		verr = append(verr, validator.NewFieldError(validator.ErrIsDefault, "{%j field.Identifier %}", v.{%s field.Name %}))
+	if !({%= RegexValidation(s, field, validation, "validator.RgbaRegex")%})() {
+		verr = append(verr, validator.NewFieldError(validator.ErrIsDefault, "rgba", "{%j field.Identifier %}", v.{%s field.Name %}))
 	}
 {%- endfunc %}
 
 {% func RGB(s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData) -%}
-	if ({%= RegexValidation(s, field, validation, "validator.RgbRegex")%})() {
-		verr = append(verr, validator.NewFieldError(validator.ErrIsDefault, "{%j field.Identifier %}", v.{%s field.Name %}))
+	if !({%= RegexValidation(s, field, validation, "validator.RgbRegex")%})() {
+		verr = append(verr, validator.NewFieldError(validator.ErrIsDefault, "rgb", "{%j field.Identifier %}", v.{%s field.Name %}))
 	}
 {%- endfunc %}

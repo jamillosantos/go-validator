@@ -3,7 +3,9 @@ package validator
 // This file was copied from github.com/go-playground/validator (thanks).
 // This library tries to make the implementation most compatible with it.
 
-import "regexp"
+import (
+	"regexp"
+)
 
 const (
 	alphaRegexString                 = "^[a-zA-Z]+$"

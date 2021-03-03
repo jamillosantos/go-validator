@@ -16,35 +16,19 @@ func init() {
 		Func: StreamLte,
 	})
 	validator.MustRegisterValidation("email", &validator.ValidationRegistration{
-		Func: StreamEmail,
-		Imports: []*validator.ImportData{
-			{
-				Path: "regexp",
-			},
-		},
+		Func:    StreamEmail,
+		Imports: []*validator.ImportData{},
 	})
 	validator.MustRegisterValidation("hexcolor", &validator.ValidationRegistration{
-		Func: StreamHexcolor,
-		Imports: []*validator.ImportData{
-			{
-				Path: "regexp",
-			},
-		},
+		Func:    StreamHexcolor,
+		Imports: []*validator.ImportData{},
 	})
 	validator.MustRegisterValidation("rgba", &validator.ValidationRegistration{
-		Func: StreamRGBa,
-		Imports: []*validator.ImportData{
-			{
-				Path: "regexp",
-			},
-		},
+		Func:    StreamRGBa,
+		Imports: []*validator.ImportData{},
 	})
 	validator.MustRegisterValidation("rgb", &validator.ValidationRegistration{
-		Func: StreamRGB,
-		Imports: []*validator.ImportData{
-			{
-				Path: "regexp",
-			},
-		},
+		Func:    StreamRGB,
+		Imports: []*validator.ImportData{},
 	})
 }
