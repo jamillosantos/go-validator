@@ -61,4 +61,15 @@ var _ = Describe("Parser", func() {
 		Expect(v[0].Name).To(Equal("between"))
 		Expect(v[0].Params).To(Equal([]string{"10", "this is a test", "20"}))
 	})
+
+	It("should parse one tag with multiple validations with parameters", func() {
+		v := tagparser.Parse(`validate:"required,min=10,max=30"`)
+		Expect(v).To(HaveLen(3))
+		Expect(v[0].Name).To(Equal("required"))
+		Expect(v[0].Params).To(BeEmpty())
+		Expect(v[1].Name).To(Equal("min"))
+		Expect(v[1].Params).To(Equal([]string{"10"}))
+		Expect(v[2].Name).To(Equal("max"))
+		Expect(v[2].Params).To(Equal([]string{"30"}))
+	})
 })

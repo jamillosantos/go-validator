@@ -1,0 +1,21 @@
+{% import "github.com/jamillosantos/go-validator" %}
+
+{% func Validate(s *validator.StructData) -%}
+
+func (v *{%s s.Struct.Name() %}) Validate() error {
+	verr := make(validator.ValidationErrors, 0)
+
+	{%- for _, field := range s.Fields -%}
+		{%- for _, validation := range field.Validations -%}
+			{%-code streamvalidation := validation.Validation.Func %}
+			{%-= validation(s, field, validation.Data)%}
+		{%- endfor -%}
+	{%- endfor -%}
+
+	if len(verr) > 0 {
+		return verr
+	}
+	return nil
+}
+
+{%- endfunc %}

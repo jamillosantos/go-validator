@@ -1,0 +1,121 @@
+{% import "github.com/jamillosantos/go-validator" %}
+
+{% func HasValueValidation(s *validator.StructData, field *validator.FieldData) -%}
+func () bool {
+{%- if (field.IsPointer) -%}
+	if v.{%s field.Name %} == nil {
+		return false
+	}
+{%- endif -%}
+{%-code
+var (
+	prefix = ""
+	zero = ""
+)
+if field.IsPointer {
+	prefix = "*"
+}
+if field.IsNumeric {
+	zero = "0"
+}
+if field.IsBoolean {
+	zero = "false"
+}
+if field.IsString {
+	zero = `""`
+}
+-%}
+{%- if field.IsArray -%}
+	if len(v.{%s field.Name %}) == 0 {
+		return false
+	}
+{%- else -%}
+	return {%s prefix %}v.{%s field.Name %} != {%= unesc(zero) %}
+{%- endif -%}
+}{%- endfunc %}
+
+{% func HasValue(s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData) -%}
+	if !({%= HasValueValidation(s, field)%})() {
+		verr = append(verr, validator.NewFieldError(validator.ErrRequired, "{%j field.Identifier %}", v.{%s field.Name %}))
+	}
+{%- endfunc %}
+
+{% func IsDefault(s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData) -%}
+	if ({%= HasValueValidation(s, field)%})() {
+		verr = append(verr, validator.NewFieldError(validator.ErrIsDefault, "{%j field.Identifier %}", v.{%s field.Name %}))
+	}
+{%- endfunc %}
+
+{% func NumberValidation(s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData, sign string) -%}
+func () bool {
+{%- if (field.IsPointer) -%}
+	if v.{%s field.Name %} == nil {
+		
+		return true
+	}
+{%- endif -%}
+{%-code
+var (
+	prefix = ""
+)
+if field.IsPointer {
+	prefix = "*"
+}
+-%}
+	return {%s prefix %}v.{%s field.Name %} {%= unesc(sign) %} {%= unesc(validation.Params[0]) %}
+}{%- endfunc -%}
+
+{% func Gte(s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData) -%}
+	if ({%= NumberValidation(s, field, validation, ">=") -%})() {
+		verr = append(verr, validator.NewFieldError(validator.ErrIsDefault, "{%j field.Identifier %}", v.{%s field.Name %}))
+	}
+{%- endfunc %}
+
+{% func Lte(s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData) -%}
+	if ({%= NumberValidation(s, field, validation, "<=") -%})() {
+		verr = append(verr, validator.NewFieldError(validator.ErrIsDefault, "{%j field.Identifier %}", v.{%s field.Name %}))
+	}
+{%- endfunc %}
+
+
+{% func RegexValidation(s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData, regexpRule string) -%}
+func () bool {
+{%- if (field.IsPointer) -%}
+	if v.{%s field.Name %} == nil {
+		return true
+	}
+{%- endif -%}
+{%-code
+var (
+	prefix = ""
+)
+if field.IsPointer {
+	prefix = "*"
+}
+-%}
+	return {%s regexpRule %}.MatchString({%s prefix %}v.{%s field.Name %})
+}{%- endfunc %}
+
+{% func Email(s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData) -%}
+	if ({%= RegexValidation(s, field, validation, "validator.EmailRegex")%})() {
+		verr = append(verr, validator.NewFieldError(validator.ErrIsDefault, "{%j field.Identifier %}", v.{%s field.Name %}))
+	}
+{%- endfunc %}
+
+{% func Hexcolor(s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData) -%}
+	if ({%= RegexValidation(s, field, validation, "validator.HexcolorRegex")%})() {
+		verr = append(verr, validator.NewFieldError(validator.ErrIsDefault, "{%j field.Identifier %}", v.{%s field.Name %}))
+	}
+{%- endfunc %}
+
+{% func RGBa(s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData) -%}
+	if ({%= RegexValidation(s, field, validation, "validator.RgbaRegex")%})() {
+		verr = append(verr, validator.NewFieldError(validator.ErrIsDefault, "{%j field.Identifier %}", v.{%s field.Name %}))
+	}
+{%- endfunc %}
+
+{% func RGB(s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData) -%}
+	if ({%= RegexValidation(s, field, validation, "validator.RgbRegex")%})() {
+		verr = append(verr, validator.NewFieldError(validator.ErrIsDefault, "{%j field.Identifier %}", v.{%s field.Name %}))
+	}
+{%- endfunc %}

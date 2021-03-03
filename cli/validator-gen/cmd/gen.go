@@ -1,0 +1,254 @@
+/*
+Copyright © 2021 NAME HERE <EMAIL ADDRESS>
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+package cmd
+
+import (
+	"bytes"
+	"fmt"
+	"io"
+	"os"
+	"path"
+	"strings"
+
+	"github.com/jamillosantos/go-validator"
+	"github.com/jamillosantos/go-validator/templates"
+
+	myasthurts "github.com/jamillosantos/go-my-ast-hurts"
+	"github.com/spf13/cobra"
+)
+
+var (
+	recursiveFlag  bool
+	verboseFlag    bool
+	tagName        string
+	outputFileName string
+)
+
+// genCmd represents the gen command
+var genCmd = &cobra.Command{
+	Use:   "gen",
+	Short: "A brief description of your command",
+	Long: `A longer description that spans multiple lines and likely contains examples
+and usage of using your command. For example:
+
+Cobra is a CLI library for Go that empowers applications.
+This application is a tool to generate the needed files
+to quickly create a Cobra application.`,
+	Run: func(cmd *cobra.Command, args []string) {
+		environment, err := myasthurts.NewEnvironment()
+		if err != nil {
+			fmt.Fprintln(os.Stderr, err.Error())
+			os.Exit(1)
+		}
+
+		_, err = environment.Import("builtin")
+		if err != nil {
+			fmt.Fprintln(os.Stderr, err.Error())
+			os.Exit(1)
+		}
+
+		/*
+			buildPkg, err := environment.Import(".")
+			if err != nil {
+				fmt.Fprintln(os.Stderr, err.Error())
+				os.Exit(2)
+			}
+		*/
+
+		if recursiveFlag {
+			verboseLn("recursive mode on")
+		} else {
+			verboseLn("recursive mode off")
+		}
+
+		for _, dir := range args {
+			verboseLn("parsing", dir)
+			pkg, err := environment.ParseDir(dir)
+			if err != nil {
+				fmt.Fprintln(os.Stderr, err.Error())
+				os.Exit(2)
+			}
+
+			generatePackage(&generationContext{
+				Level: 0,
+			}, pkg)
+		}
+	},
+}
+
+type generationContext struct {
+	Level int
+}
+
+func verboseLn(args ...interface{}) {
+	if !verboseFlag {
+		return
+	}
+	fmt.Fprintln(os.Stderr, args...)
+}
+
+func verbose(args ...interface{}) {
+	if !verboseFlag {
+		return
+	}
+	fmt.Fprint(os.Stderr, args...)
+}
+
+func hasValidatorFlag(s *myasthurts.Struct) bool {
+	for _, field := range s.Fields {
+		if field.Tag.TagParamByName(tagName) != nil {
+			return true
+		}
+	}
+	return false
+}
+
+func generateValidation(w io.Writer, s *validator.StructData) error {
+	templates.WriteValidate(w, s)
+	return nil
+}
+
+func generatePackage(ctx *generationContext, pkg *myasthurts.Package) {
+	verboseLn("package", pkg.Name)
+
+	// Creates a new verbose to add ident to the verbose messages.
+	verboseLn := func(args ...interface{}) {
+		verboseLn(append([]interface{}{strings.Repeat("  ", ctx.Level+1)}, args...)...)
+	}
+
+	verboseLn(len(pkg.Structs), "structs found")
+	verboseLn()
+
+	ss := make([]*validator.StructData, 0, len(pkg.Structs))
+	for _, s := range pkg.Structs {
+		verbose("checking struct", s.Name())
+
+		if hasValidatorFlag(s) {
+			verboseLn("(has validation)")
+			structData := &validator.StructData{
+				Struct: s,
+				Fields: make([]*validator.FieldData, 0),
+			}
+			for _, field := range s.Fields {
+				structData.Fields = append(structData.Fields, validator.NewFieldData(field))
+			}
+			ss = append(ss, structData)
+		} else {
+			verboseLn("(no validation)")
+		}
+	}
+
+	var (
+		importsCache = map[string]*validator.ImportData{}
+		imports      = []*validator.ImportData{
+			{
+				Path: "github.com/jamillosantos/go-validator",
+			},
+		}
+	)
+
+	// Check if all validation information is valid for each validation (1) found for
+	// each field (2) for each struct (3).
+	for _, s := range ss { // For each struct (3)
+		for _, field := range s.Fields { // For each field (2)
+			for _, validation := range field.Validations { // For each validation (1)
+				// Checks if it needs an special import.
+				if validation.Validation.Imports != nil {
+					for _, validationImport := range validation.Validation.Imports {
+						importName := validationImport.Name
+						if validationImport.Name == "" {
+							importName = validationImport.Path
+						}
+						// Checks if it is already imported.
+						if _, ok := importsCache[importName]; ok {
+							continue
+						}
+						importsCache[importName] = validationImport
+						imports = append(imports, validationImport)
+					}
+				}
+				if validation.Validation.ValidateField == nil {
+					continue
+				}
+				err := validation.Validation.ValidateField(s, field, validation.Data)
+				if err != nil {
+					panic(err)
+				}
+			}
+		}
+	}
+
+	pkgFile := bytes.NewBuffer(nil)
+	if len(ss) > 0 {
+
+		fmt.Fprintf(pkgFile, `// Code generated by validator-gen. DO NOT EDIT.
+// See https://github.com/jamillosantos/go-validator for details.
+`)
+		fmt.Fprintf(pkgFile, "package %s\n", pkg.Name)
+	}
+
+	if len(imports) > 0 {
+		fmt.Fprintln(pkgFile, "import (")
+		for _, importForValidation := range imports {
+			fmt.Fprintf(pkgFile, "\t")
+			if importForValidation.Name != "" {
+				fmt.Fprintf(pkgFile, "%s ", importForValidation.Name)
+
+			}
+			fmt.Fprintf(pkgFile, "\"%s\"\n", importForValidation.Path)
+		}
+		fmt.Fprintln(pkgFile, ")")
+	}
+
+	for _, s := range ss {
+		generateValidation(pkgFile, s)
+	}
+
+	var outputStream io.Writer
+	if outputFileName == "-" {
+		outputStream = os.Stdout
+	} else {
+		fileName := path.Join(pkg.RealPath, "validate_generated.go")
+		f, err := os.OpenFile(fileName, os.O_CREATE|os.O_TRUNC|os.O_WRONLY, os.ModePerm)
+		if err != nil {
+			fmt.Fprintln(os.Stderr, fmt.Errorf("could not open file: %s: %w", fileName, err))
+			os.Exit(4)
+		}
+		defer func() {
+			f.Close()
+		}()
+		outputStream = f
+	}
+	io.Copy(outputStream, pkgFile)
+
+	if recursiveFlag {
+		verboseLn("subpackages found:", len(pkg.Subpackages))
+		for _, pkg := range pkg.Subpackages {
+			generatePackage(&generationContext{
+				Level: ctx.Level + 1,
+			}, pkg)
+		}
+	}
+}
+
+func init() {
+	rootCmd.AddCommand(genCmd)
+
+	genCmd.Flags().BoolVarP(&recursiveFlag, "recursive", "r", false, "Enables recursive package discovery")
+	genCmd.Flags().BoolVarP(&verboseFlag, "verbose", "v", false, "Enables verbose mode")
+	genCmd.Flags().StringVar(&tagName, "tagname", "validate", "Set the tagname")
+	genCmd.Flags().StringVarP(&outputFileName, "output", "o", "validator_generated.go", "Set the name of the files generated by the validator ('-' for Stdout)")
+}

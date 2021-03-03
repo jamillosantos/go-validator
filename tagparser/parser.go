@@ -23,6 +23,9 @@ func parseValidations(value string) []*Validation {
 	validations := make([]*Validation, 0)
 	for matchIndex := 0; matchIndex < len(matches); matchIndex++ {
 		match := matches[matchIndex]
+		if match[0] == "," || match[0] == "|" {
+			continue
+		}
 		validation := &Validation{
 			Name: match[1],
 		}
