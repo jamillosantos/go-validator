@@ -52,7 +52,7 @@ Go struct validation with code generation
 :x: hsl
 :x: hsla
 :x: e164
-:x: email
+:heavy_check_mark: email
 :x: url
 :x: uri
 :x: urn_rfc2141

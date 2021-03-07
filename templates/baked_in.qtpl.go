@@ -388,21 +388,13 @@ func Lte(s *validator.StructData, field *validator.FieldData, validation *valida
 func StreamRegexValidation(qw422016 *qt422016.Writer, s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData, regexpRule string) {
 //line baked_in.qtpl:81
 	qw422016.N().S(`func () bool {
-`)
+	`)
 //line baked_in.qtpl:83
-	if field.IsPointer {
+	StreamEnsureStringPointerSafety(qw422016, field)
 //line baked_in.qtpl:83
-		qw422016.N().S(`	if v.`)
-//line baked_in.qtpl:84
-		qw422016.E().S(field.Name)
-//line baked_in.qtpl:84
-		qw422016.N().S(` == nil {
-		return true
-	}
+	qw422016.N().S(`
 `)
-//line baked_in.qtpl:87
-	}
-//line baked_in.qtpl:89
+//line baked_in.qtpl:85
 	var (
 		prefix = ""
 	)
@@ -410,238 +402,312 @@ func StreamRegexValidation(qw422016 *qt422016.Writer, s *validator.StructData, f
 		prefix = "*"
 	}
 
-//line baked_in.qtpl:95
+//line baked_in.qtpl:91
 	qw422016.N().S(`	return `)
-//line baked_in.qtpl:96
+//line baked_in.qtpl:92
 	qw422016.E().S(regexpRule)
-//line baked_in.qtpl:96
+//line baked_in.qtpl:92
 	qw422016.N().S(`.MatchString(`)
-//line baked_in.qtpl:96
+//line baked_in.qtpl:92
 	qw422016.E().S(prefix)
-//line baked_in.qtpl:96
+//line baked_in.qtpl:92
 	qw422016.N().S(`v.`)
-//line baked_in.qtpl:96
+//line baked_in.qtpl:92
 	qw422016.E().S(field.Name)
-//line baked_in.qtpl:96
+//line baked_in.qtpl:92
 	qw422016.N().S(`)
 }`)
-//line baked_in.qtpl:97
+//line baked_in.qtpl:93
 }
 
-//line baked_in.qtpl:97
+//line baked_in.qtpl:93
 func WriteRegexValidation(qq422016 qtio422016.Writer, s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData, regexpRule string) {
-//line baked_in.qtpl:97
+//line baked_in.qtpl:93
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line baked_in.qtpl:97
+//line baked_in.qtpl:93
 	StreamRegexValidation(qw422016, s, field, validation, regexpRule)
-//line baked_in.qtpl:97
+//line baked_in.qtpl:93
 	qt422016.ReleaseWriter(qw422016)
-//line baked_in.qtpl:97
+//line baked_in.qtpl:93
 }
 
-//line baked_in.qtpl:97
+//line baked_in.qtpl:93
 func RegexValidation(s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData, regexpRule string) string {
-//line baked_in.qtpl:97
+//line baked_in.qtpl:93
 	qb422016 := qt422016.AcquireByteBuffer()
-//line baked_in.qtpl:97
+//line baked_in.qtpl:93
 	WriteRegexValidation(qb422016, s, field, validation, regexpRule)
-//line baked_in.qtpl:97
+//line baked_in.qtpl:93
 	qs422016 := string(qb422016.B)
-//line baked_in.qtpl:97
+//line baked_in.qtpl:93
 	qt422016.ReleaseByteBuffer(qb422016)
-//line baked_in.qtpl:97
+//line baked_in.qtpl:93
 	return qs422016
-//line baked_in.qtpl:97
+//line baked_in.qtpl:93
 }
 
-//line baked_in.qtpl:99
-func StreamEmail(qw422016 *qt422016.Writer, s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData) {
-//line baked_in.qtpl:99
-	qw422016.N().S(`	if !(`)
-//line baked_in.qtpl:100
-	StreamRegexValidation(qw422016, s, field, validation, "validator.EmailRegex")
-//line baked_in.qtpl:100
-	qw422016.N().S(`)() {
-		verr = append(verr, validator.NewFieldError(validator.ErrIsDefault, "email", "`)
-//line baked_in.qtpl:101
-	qw422016.E().J(field.Identifier)
-//line baked_in.qtpl:101
-	qw422016.N().S(`", v.`)
-//line baked_in.qtpl:101
+//line baked_in.qtpl:95
+func StreamEnsureStringPointerSafety(qw422016 *qt422016.Writer, field *validator.FieldData) {
+//line baked_in.qtpl:97
+	var (
+		prefix = ""
+	)
+	if field.IsPointer {
+		prefix = "*"
+	}
+
+//line baked_in.qtpl:103
+	qw422016.N().S(`	if `)
+//line baked_in.qtpl:104
+	if field.IsPointer {
+//line baked_in.qtpl:104
+		qw422016.N().S(`v.`)
+//line baked_in.qtpl:104
+		qw422016.E().S(field.Name)
+//line baked_in.qtpl:104
+		qw422016.N().S(` == nil || `)
+//line baked_in.qtpl:104
+	}
+//line baked_in.qtpl:104
+	qw422016.E().S(prefix)
+//line baked_in.qtpl:104
+	qw422016.N().S(`v.`)
+//line baked_in.qtpl:104
 	qw422016.E().S(field.Name)
-//line baked_in.qtpl:101
+//line baked_in.qtpl:104
+	qw422016.N().S(` == "" {
+		return true
+	}
+`)
+//line baked_in.qtpl:107
+}
+
+//line baked_in.qtpl:107
+func WriteEnsureStringPointerSafety(qq422016 qtio422016.Writer, field *validator.FieldData) {
+//line baked_in.qtpl:107
+	qw422016 := qt422016.AcquireWriter(qq422016)
+//line baked_in.qtpl:107
+	StreamEnsureStringPointerSafety(qw422016, field)
+//line baked_in.qtpl:107
+	qt422016.ReleaseWriter(qw422016)
+//line baked_in.qtpl:107
+}
+
+//line baked_in.qtpl:107
+func EnsureStringPointerSafety(field *validator.FieldData) string {
+//line baked_in.qtpl:107
+	qb422016 := qt422016.AcquireByteBuffer()
+//line baked_in.qtpl:107
+	WriteEnsureStringPointerSafety(qb422016, field)
+//line baked_in.qtpl:107
+	qs422016 := string(qb422016.B)
+//line baked_in.qtpl:107
+	qt422016.ReleaseByteBuffer(qb422016)
+//line baked_in.qtpl:107
+	return qs422016
+//line baked_in.qtpl:107
+}
+
+//line baked_in.qtpl:109
+func StreamEmail(qw422016 *qt422016.Writer, s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData) {
+//line baked_in.qtpl:109
+	qw422016.N().S(`	if !(`)
+//line baked_in.qtpl:110
+	StreamRegexValidation(qw422016, s, field, validation, "validator.EmailRegex")
+//line baked_in.qtpl:110
+	qw422016.N().S(`)() {
+		verr = append(verr, validator.NewFieldError(validator.ErrEmail, "email", "`)
+//line baked_in.qtpl:111
+	qw422016.E().J(field.Identifier)
+//line baked_in.qtpl:111
+	qw422016.N().S(`", v.`)
+//line baked_in.qtpl:111
+	qw422016.E().S(field.Name)
+//line baked_in.qtpl:111
 	qw422016.N().S(`))
 	}
 `)
-//line baked_in.qtpl:103
+//line baked_in.qtpl:113
 }
 
-//line baked_in.qtpl:103
+//line baked_in.qtpl:113
 func WriteEmail(qq422016 qtio422016.Writer, s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData) {
-//line baked_in.qtpl:103
+//line baked_in.qtpl:113
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line baked_in.qtpl:103
+//line baked_in.qtpl:113
 	StreamEmail(qw422016, s, field, validation)
-//line baked_in.qtpl:103
+//line baked_in.qtpl:113
 	qt422016.ReleaseWriter(qw422016)
-//line baked_in.qtpl:103
+//line baked_in.qtpl:113
 }
 
-//line baked_in.qtpl:103
+//line baked_in.qtpl:113
 func Email(s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData) string {
-//line baked_in.qtpl:103
+//line baked_in.qtpl:113
 	qb422016 := qt422016.AcquireByteBuffer()
-//line baked_in.qtpl:103
+//line baked_in.qtpl:113
 	WriteEmail(qb422016, s, field, validation)
-//line baked_in.qtpl:103
+//line baked_in.qtpl:113
 	qs422016 := string(qb422016.B)
-//line baked_in.qtpl:103
+//line baked_in.qtpl:113
 	qt422016.ReleaseByteBuffer(qb422016)
-//line baked_in.qtpl:103
+//line baked_in.qtpl:113
 	return qs422016
-//line baked_in.qtpl:103
+//line baked_in.qtpl:113
 }
 
-//line baked_in.qtpl:105
+//line baked_in.qtpl:115
 func StreamHexcolor(qw422016 *qt422016.Writer, s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData) {
-//line baked_in.qtpl:105
-	qw422016.N().S(`	if !(`)
-//line baked_in.qtpl:106
+//line baked_in.qtpl:115
+	qw422016.N().S(`	if v.`)
+//line baked_in.qtpl:116
+	qw422016.E().S(field.Name)
+//line baked_in.qtpl:116
+	qw422016.N().S(` != "" && !(`)
+//line baked_in.qtpl:116
 	StreamRegexValidation(qw422016, s, field, validation, "validator.HexcolorRegex")
-//line baked_in.qtpl:106
+//line baked_in.qtpl:116
 	qw422016.N().S(`)() {
 		verr = append(verr, validator.NewFieldError(validator.ErrIsDefault, "hexcolor", "`)
-//line baked_in.qtpl:107
+//line baked_in.qtpl:117
 	qw422016.E().J(field.Identifier)
-//line baked_in.qtpl:107
+//line baked_in.qtpl:117
 	qw422016.N().S(`", v.`)
-//line baked_in.qtpl:107
+//line baked_in.qtpl:117
 	qw422016.E().S(field.Name)
-//line baked_in.qtpl:107
+//line baked_in.qtpl:117
 	qw422016.N().S(`))
 	}
 `)
-//line baked_in.qtpl:109
+//line baked_in.qtpl:119
 }
 
-//line baked_in.qtpl:109
+//line baked_in.qtpl:119
 func WriteHexcolor(qq422016 qtio422016.Writer, s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData) {
-//line baked_in.qtpl:109
+//line baked_in.qtpl:119
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line baked_in.qtpl:109
+//line baked_in.qtpl:119
 	StreamHexcolor(qw422016, s, field, validation)
-//line baked_in.qtpl:109
+//line baked_in.qtpl:119
 	qt422016.ReleaseWriter(qw422016)
-//line baked_in.qtpl:109
+//line baked_in.qtpl:119
 }
 
-//line baked_in.qtpl:109
+//line baked_in.qtpl:119
 func Hexcolor(s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData) string {
-//line baked_in.qtpl:109
+//line baked_in.qtpl:119
 	qb422016 := qt422016.AcquireByteBuffer()
-//line baked_in.qtpl:109
+//line baked_in.qtpl:119
 	WriteHexcolor(qb422016, s, field, validation)
-//line baked_in.qtpl:109
+//line baked_in.qtpl:119
 	qs422016 := string(qb422016.B)
-//line baked_in.qtpl:109
+//line baked_in.qtpl:119
 	qt422016.ReleaseByteBuffer(qb422016)
-//line baked_in.qtpl:109
+//line baked_in.qtpl:119
 	return qs422016
-//line baked_in.qtpl:109
+//line baked_in.qtpl:119
 }
 
-//line baked_in.qtpl:111
+//line baked_in.qtpl:121
 func StreamRGBa(qw422016 *qt422016.Writer, s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData) {
-//line baked_in.qtpl:111
-	qw422016.N().S(`	if !(`)
-//line baked_in.qtpl:112
+//line baked_in.qtpl:121
+	qw422016.N().S(`	if v.`)
+//line baked_in.qtpl:122
+	qw422016.E().S(field.Name)
+//line baked_in.qtpl:122
+	qw422016.N().S(` != "" && !(`)
+//line baked_in.qtpl:122
 	StreamRegexValidation(qw422016, s, field, validation, "validator.RgbaRegex")
-//line baked_in.qtpl:112
+//line baked_in.qtpl:122
 	qw422016.N().S(`)() {
 		verr = append(verr, validator.NewFieldError(validator.ErrIsDefault, "rgba", "`)
-//line baked_in.qtpl:113
+//line baked_in.qtpl:123
 	qw422016.E().J(field.Identifier)
-//line baked_in.qtpl:113
+//line baked_in.qtpl:123
 	qw422016.N().S(`", v.`)
-//line baked_in.qtpl:113
+//line baked_in.qtpl:123
 	qw422016.E().S(field.Name)
-//line baked_in.qtpl:113
+//line baked_in.qtpl:123
 	qw422016.N().S(`))
 	}
 `)
-//line baked_in.qtpl:115
+//line baked_in.qtpl:125
 }
 
-//line baked_in.qtpl:115
+//line baked_in.qtpl:125
 func WriteRGBa(qq422016 qtio422016.Writer, s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData) {
-//line baked_in.qtpl:115
+//line baked_in.qtpl:125
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line baked_in.qtpl:115
+//line baked_in.qtpl:125
 	StreamRGBa(qw422016, s, field, validation)
-//line baked_in.qtpl:115
+//line baked_in.qtpl:125
 	qt422016.ReleaseWriter(qw422016)
-//line baked_in.qtpl:115
+//line baked_in.qtpl:125
 }
 
-//line baked_in.qtpl:115
+//line baked_in.qtpl:125
 func RGBa(s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData) string {
-//line baked_in.qtpl:115
+//line baked_in.qtpl:125
 	qb422016 := qt422016.AcquireByteBuffer()
-//line baked_in.qtpl:115
+//line baked_in.qtpl:125
 	WriteRGBa(qb422016, s, field, validation)
-//line baked_in.qtpl:115
+//line baked_in.qtpl:125
 	qs422016 := string(qb422016.B)
-//line baked_in.qtpl:115
+//line baked_in.qtpl:125
 	qt422016.ReleaseByteBuffer(qb422016)
-//line baked_in.qtpl:115
+//line baked_in.qtpl:125
 	return qs422016
-//line baked_in.qtpl:115
+//line baked_in.qtpl:125
 }
 
-//line baked_in.qtpl:117
+//line baked_in.qtpl:127
 func StreamRGB(qw422016 *qt422016.Writer, s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData) {
-//line baked_in.qtpl:117
-	qw422016.N().S(`	if !(`)
-//line baked_in.qtpl:118
+//line baked_in.qtpl:127
+	qw422016.N().S(`	if v.`)
+//line baked_in.qtpl:128
+	qw422016.E().S(field.Name)
+//line baked_in.qtpl:128
+	qw422016.N().S(` != "" && !(`)
+//line baked_in.qtpl:128
 	StreamRegexValidation(qw422016, s, field, validation, "validator.RgbRegex")
-//line baked_in.qtpl:118
+//line baked_in.qtpl:128
 	qw422016.N().S(`)() {
 		verr = append(verr, validator.NewFieldError(validator.ErrIsDefault, "rgb", "`)
-//line baked_in.qtpl:119
+//line baked_in.qtpl:129
 	qw422016.E().J(field.Identifier)
-//line baked_in.qtpl:119
+//line baked_in.qtpl:129
 	qw422016.N().S(`", v.`)
-//line baked_in.qtpl:119
+//line baked_in.qtpl:129
 	qw422016.E().S(field.Name)
-//line baked_in.qtpl:119
+//line baked_in.qtpl:129
 	qw422016.N().S(`))
 	}
 `)
-//line baked_in.qtpl:121
+//line baked_in.qtpl:131
 }
 
-//line baked_in.qtpl:121
+//line baked_in.qtpl:131
 func WriteRGB(qq422016 qtio422016.Writer, s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData) {
-//line baked_in.qtpl:121
+//line baked_in.qtpl:131
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line baked_in.qtpl:121
+//line baked_in.qtpl:131
 	StreamRGB(qw422016, s, field, validation)
-//line baked_in.qtpl:121
+//line baked_in.qtpl:131
 	qt422016.ReleaseWriter(qw422016)
-//line baked_in.qtpl:121
+//line baked_in.qtpl:131
 }
 
-//line baked_in.qtpl:121
+//line baked_in.qtpl:131
 func RGB(s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData) string {
-//line baked_in.qtpl:121
+//line baked_in.qtpl:131
 	qb422016 := qt422016.AcquireByteBuffer()
-//line baked_in.qtpl:121
+//line baked_in.qtpl:131
 	WriteRGB(qb422016, s, field, validation)
-//line baked_in.qtpl:121
+//line baked_in.qtpl:131
 	qs422016 := string(qb422016.B)
-//line baked_in.qtpl:121
+//line baked_in.qtpl:131
 	qt422016.ReleaseByteBuffer(qb422016)
-//line baked_in.qtpl:121
+//line baked_in.qtpl:131
 	return qs422016
-//line baked_in.qtpl:121
+//line baked_in.qtpl:131
 }

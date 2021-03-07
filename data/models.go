@@ -1,5 +1,15 @@
 package data
 
+type RequiredValidation struct {
+	Name        string  `json:"name"     validate:"required"`
+	NamePointer *string `json:"name_ptr" validate:"required"`
+}
+
+type EmailValidation struct {
+	Email        string  `json:"email" validate:"email"`
+	EmailPointer *string `validate:"email"`
+}
+
 // User contains user information
 type User struct {
 	FirstName      string `json:"fname"`

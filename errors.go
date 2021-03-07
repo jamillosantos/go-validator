@@ -33,6 +33,8 @@ func (err *FieldError) Error() string {
 }
 
 var (
-	ErrRequired  = errors.New("field required")
-	ErrIsDefault = errors.New("field must have default value")
+	ErrRequired      = errors.New("field required")
+	ErrIsDefault     = errors.New("field must have default value")
+	ErrInvalidFormat = errors.New("invalid format")
+	ErrEmail         = errors.Wrap(ErrInvalidFormat, "invalid email")
 )
