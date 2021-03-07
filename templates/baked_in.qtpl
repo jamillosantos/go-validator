@@ -1,5 +1,34 @@
 {% import "github.com/jamillosantos/go-validator" %}
 
+
+{% func EnsureStringPointerSafety(field *validator.FieldData) -%}
+{%-code
+var (
+	prefix = ""
+)
+if field.IsPointer {
+	prefix = "*"
+}
+-%}
+	if {% if (field.IsPointer) -%}v.{%s field.Name %} == nil || {% endif -%}{%s prefix %}v.{%s field.Name %} == "" {
+		return true
+	}
+{%- endfunc %}
+
+{% func EnsureNumericPointerSafety(field *validator.FieldData) -%}
+{%-code
+var (
+	prefix = ""
+)
+if field.IsPointer {
+	prefix = "*"
+}
+-%}
+	if {% if (field.IsPointer) -%}v.{%s field.Name %} == nil || {% endif -%}{%s prefix %}v.{%s field.Name %} == 0 {
+		return true
+	}
+{%- endfunc %}
+
 {% func HasValueValidation(s *validator.StructData, field *validator.FieldData) -%}
 func () bool {
 {%- if (field.IsPointer) -%}
@@ -48,12 +77,6 @@ if field.IsString {
 
 {% func NumberValidation(s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData, sign string) -%}
 func () bool {
-{%- if (field.IsPointer) -%}
-	if v.{%s field.Name %} == nil {
-		
-		return true
-	}
-{%- endif -%}
 {%-code
 var (
 	prefix = ""
@@ -62,7 +85,28 @@ if field.IsPointer {
 	prefix = "*"
 }
 -%}
+	if {% if (field.IsPointer) -%}v.{%s field.Name %} == nil || {% endif -%}{%s prefix %}v.{%s field.Name %} == 0 {
+		return true
+	}
 	return {%s prefix %}v.{%s field.Name %} {%= unesc(sign) %} {%= unesc(validation.Params[0]) %}
+}{%- endfunc -%}
+
+{% func LenValidation(s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData, sign string) -%}
+func () bool {
+{%-code
+var (
+	prefix = ""
+)
+if field.IsPointer {
+	prefix = "*"
+}
+-%}
+{%- if field.IsString && field.IsPointer -%}
+	if {% if field.IsPointer %}v.{%s field.Name %} == nil || {% endif -%}{%s prefix %}v.{%s field.Name %} == "" {
+		return true
+	}
+{%- endif -%}
+	return len({%s prefix %}v.{%s field.Name %}) == 0 || len({%s prefix %}v.{%s field.Name %}) {%= unesc(sign) %} {%= unesc(validation.Params[0]) %}
 }{%- endfunc -%}
 
 {% func Gte(s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData) -%}
@@ -76,7 +120,6 @@ if field.IsPointer {
 		verr = append(verr, validator.NewFieldError(validator.ErrIsDefault, "lte", "{%j field.Identifier %}", v.{%s field.Name %}))
 	}
 {%- endfunc %}
-
 
 {% func RegexValidation(s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData, regexpRule string) -%}
 func () bool {
@@ -92,24 +135,42 @@ if field.IsPointer {
 	return {%s regexpRule %}.MatchString({%s prefix %}v.{%s field.Name %})
 }{%- endfunc %}
 
-{% func EnsureStringPointerSafety(field *validator.FieldData) -%}
-{%-code
-var (
-	prefix = ""
-)
-if field.IsPointer {
-	prefix = "*"
-}
--%}
-	if {% if (field.IsPointer) -%}v.{%s field.Name %} == nil || {% endif -%}{%s prefix %}v.{%s field.Name %} == "" {
-		return true
-	}
-{%- endfunc %}
-
 {% func Email(s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData) -%}
 	if !({%= RegexValidation(s, field, validation, "validator.EmailRegex")%})() {
 		verr = append(verr, validator.NewFieldError(validator.ErrEmail, "email", "{%j field.Identifier %}", v.{%s field.Name %}))
 	}
+{%- endfunc %}
+
+{% func Min(s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData) -%}
+{%- if field.IsNumeric -%}
+	if !({%= NumberValidation(s, field, validation, ">=") -%})() {
+		verr = append(verr, validator.NewFieldError(validator.ErrMin, "min", "{%j field.Identifier %}", v.{%s field.Name %}))
+	}
+{%- elseif (field.IsArray || field.IsString) -%}
+	if !({%= LenValidation(s, field, validation, ">=")%})() {
+		verr = append(verr, validator.NewFieldError(validator.ErrMin, "min", "{%j field.Identifier %}", v.{%s field.Name %}))
+	}
+{%- else -%}
+{%code
+	panic("field must be numeric, array or string")
+-%}
+{%- endif -%}
+{%- endfunc %}
+
+{% func Max(s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData) -%}
+{%- if field.IsNumeric -%}
+	if !({%= NumberValidation(s, field, validation, "<=") -%})() {
+		verr = append(verr, validator.NewFieldError(validator.ErrMax, "max", "{%j field.Identifier %}", v.{%s field.Name %}))
+	}
+{%- elseif (field.IsArray || field.IsString) -%}
+	if !({%= LenValidation(s, field, validation, "<=")%})() {
+		verr = append(verr, validator.NewFieldError(validator.ErrMax, "max", "{%j field.Identifier %}", v.{%s field.Name %}))
+	}
+{%- else -%}
+{%code
+	panic("field must be numeric, array or string")
+-%}
+{%- endif -%}
 {%- endfunc %}
 
 {% func Hexcolor(s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData) -%}

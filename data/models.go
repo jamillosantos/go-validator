@@ -10,6 +10,22 @@ type EmailValidation struct {
 	EmailPointer *string `validate:"email"`
 }
 
+type MinValidation struct {
+	Name       string   `json:"name"      validate:"min=3"`
+	NamePtr    *string  `json:"name_ptr"  validate:"min=3"`
+	Names      []string `json:"names"     validate:"min=3"`
+	Age        int      `json:"age"       validate:"min=35"`
+	AgePointer *int     `json:"age_ptr"   validate:"min=35"`
+}
+
+type MaxValidation struct {
+	Name       string   `json:"name"      validate:"max=3"`
+	NamePtr    *string  `json:"name_ptr"  validate:"max=3"`
+	Names      []string `json:"names"     validate:"max=3"`
+	Age        int      `json:"age"       validate:"max=35"`
+	AgePointer *int     `json:"age_ptr"   validate:"max=35"`
+}
+
 // User contains user information
 type User struct {
 	FirstName      string `json:"fname"`

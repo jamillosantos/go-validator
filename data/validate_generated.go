@@ -66,11 +66,124 @@ func (v *EmailValidation) Validate() error {
 }
 
 
+func (v *MinValidation) Validate() error {
+	verr := make(validator.ValidationErrors, 0)
+
+
+	if !(func () bool {
+	return len(v.Name) == 0 || len(v.Name) >= 3
+})() {
+		verr = append(verr, validator.NewFieldError(validator.ErrMin, "min", "name", v.Name))
+	}
+
+
+	if !(func () bool {
+	if v.NamePtr == nil || *v.NamePtr == "" {
+		return true
+	}
+	return len(*v.NamePtr) == 0 || len(*v.NamePtr) >= 3
+})() {
+		verr = append(verr, validator.NewFieldError(validator.ErrMin, "min", "name_ptr", v.NamePtr))
+	}
+
+
+	if !(func () bool {
+	return len(v.Names) == 0 || len(v.Names) >= 3
+})() {
+		verr = append(verr, validator.NewFieldError(validator.ErrMin, "min", "names", v.Names))
+	}
+
+
+	if !(func () bool {
+	if v.Age == 0 {
+		return true
+	}
+	return v.Age >= 35
+})() {
+		verr = append(verr, validator.NewFieldError(validator.ErrMin, "min", "age", v.Age))
+	}
+
+
+	if !(func () bool {
+	if v.AgePointer == nil || *v.AgePointer == 0 {
+		return true
+	}
+	return *v.AgePointer >= 35
+})() {
+		verr = append(verr, validator.NewFieldError(validator.ErrMin, "min", "age_ptr", v.AgePointer))
+	}
+
+
+	if len(verr) > 0 {
+		return verr
+	}
+	return nil
+}
+
+
+func (v *MaxValidation) Validate() error {
+	verr := make(validator.ValidationErrors, 0)
+
+
+	if !(func () bool {
+	return len(v.Name) == 0 || len(v.Name) <= 3
+})() {
+		verr = append(verr, validator.NewFieldError(validator.ErrMax, "max", "name", v.Name))
+	}
+
+
+	if !(func () bool {
+	if v.NamePtr == nil || *v.NamePtr == "" {
+		return true
+	}
+	return len(*v.NamePtr) == 0 || len(*v.NamePtr) <= 3
+})() {
+		verr = append(verr, validator.NewFieldError(validator.ErrMax, "max", "name_ptr", v.NamePtr))
+	}
+
+
+	if !(func () bool {
+	return len(v.Names) == 0 || len(v.Names) <= 3
+})() {
+		verr = append(verr, validator.NewFieldError(validator.ErrMax, "max", "names", v.Names))
+	}
+
+
+	if !(func () bool {
+	if v.Age == 0 {
+		return true
+	}
+	return v.Age <= 35
+})() {
+		verr = append(verr, validator.NewFieldError(validator.ErrMax, "max", "age", v.Age))
+	}
+
+
+	if !(func () bool {
+	if v.AgePointer == nil || *v.AgePointer == 0 {
+		return true
+	}
+	return *v.AgePointer <= 35
+})() {
+		verr = append(verr, validator.NewFieldError(validator.ErrMax, "max", "age_ptr", v.AgePointer))
+	}
+
+
+	if len(verr) > 0 {
+		return verr
+	}
+	return nil
+}
+
+
 func (v *User) Validate() error {
 	verr := make(validator.ValidationErrors, 0)
 
 
 	if (func () bool {
+	if v.Age == 0 {
+		return true
+	}
 	return v.Age >= 0
 })() {
 		verr = append(verr, validator.NewFieldError(validator.ErrIsDefault, "gte", "age", v.Age))
@@ -78,6 +191,9 @@ func (v *User) Validate() error {
 
 
 	if (func () bool {
+	if v.Age == 0 {
+		return true
+	}
 	return v.Age <= 130
 })() {
 		verr = append(verr, validator.NewFieldError(validator.ErrIsDefault, "lte", "age", v.Age))

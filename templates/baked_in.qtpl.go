@@ -7,38 +7,162 @@ package templates
 //line baked_in.qtpl:1
 import "github.com/jamillosantos/go-validator"
 
-//line baked_in.qtpl:3
+//line baked_in.qtpl:4
 import (
 	qtio422016 "io"
 
 	qt422016 "github.com/valyala/quicktemplate"
 )
 
-//line baked_in.qtpl:3
+//line baked_in.qtpl:4
 var (
 	_ = qtio422016.Copy
 	_ = qt422016.AcquireByteBuffer
 )
 
-//line baked_in.qtpl:3
+//line baked_in.qtpl:4
+func StreamEnsureStringPointerSafety(qw422016 *qt422016.Writer, field *validator.FieldData) {
+//line baked_in.qtpl:6
+	var (
+		prefix = ""
+	)
+	if field.IsPointer {
+		prefix = "*"
+	}
+
+//line baked_in.qtpl:12
+	qw422016.N().S(`	if `)
+//line baked_in.qtpl:13
+	if field.IsPointer {
+//line baked_in.qtpl:13
+		qw422016.N().S(`v.`)
+//line baked_in.qtpl:13
+		qw422016.E().S(field.Name)
+//line baked_in.qtpl:13
+		qw422016.N().S(` == nil || `)
+//line baked_in.qtpl:13
+	}
+//line baked_in.qtpl:13
+	qw422016.E().S(prefix)
+//line baked_in.qtpl:13
+	qw422016.N().S(`v.`)
+//line baked_in.qtpl:13
+	qw422016.E().S(field.Name)
+//line baked_in.qtpl:13
+	qw422016.N().S(` == "" {
+		return true
+	}
+`)
+//line baked_in.qtpl:16
+}
+
+//line baked_in.qtpl:16
+func WriteEnsureStringPointerSafety(qq422016 qtio422016.Writer, field *validator.FieldData) {
+//line baked_in.qtpl:16
+	qw422016 := qt422016.AcquireWriter(qq422016)
+//line baked_in.qtpl:16
+	StreamEnsureStringPointerSafety(qw422016, field)
+//line baked_in.qtpl:16
+	qt422016.ReleaseWriter(qw422016)
+//line baked_in.qtpl:16
+}
+
+//line baked_in.qtpl:16
+func EnsureStringPointerSafety(field *validator.FieldData) string {
+//line baked_in.qtpl:16
+	qb422016 := qt422016.AcquireByteBuffer()
+//line baked_in.qtpl:16
+	WriteEnsureStringPointerSafety(qb422016, field)
+//line baked_in.qtpl:16
+	qs422016 := string(qb422016.B)
+//line baked_in.qtpl:16
+	qt422016.ReleaseByteBuffer(qb422016)
+//line baked_in.qtpl:16
+	return qs422016
+//line baked_in.qtpl:16
+}
+
+//line baked_in.qtpl:18
+func StreamEnsureNumericPointerSafety(qw422016 *qt422016.Writer, field *validator.FieldData) {
+//line baked_in.qtpl:20
+	var (
+		prefix = ""
+	)
+	if field.IsPointer {
+		prefix = "*"
+	}
+
+//line baked_in.qtpl:26
+	qw422016.N().S(`	if `)
+//line baked_in.qtpl:27
+	if field.IsPointer {
+//line baked_in.qtpl:27
+		qw422016.N().S(`v.`)
+//line baked_in.qtpl:27
+		qw422016.E().S(field.Name)
+//line baked_in.qtpl:27
+		qw422016.N().S(` == nil || `)
+//line baked_in.qtpl:27
+	}
+//line baked_in.qtpl:27
+	qw422016.E().S(prefix)
+//line baked_in.qtpl:27
+	qw422016.N().S(`v.`)
+//line baked_in.qtpl:27
+	qw422016.E().S(field.Name)
+//line baked_in.qtpl:27
+	qw422016.N().S(` == 0 {
+		return true
+	}
+`)
+//line baked_in.qtpl:30
+}
+
+//line baked_in.qtpl:30
+func WriteEnsureNumericPointerSafety(qq422016 qtio422016.Writer, field *validator.FieldData) {
+//line baked_in.qtpl:30
+	qw422016 := qt422016.AcquireWriter(qq422016)
+//line baked_in.qtpl:30
+	StreamEnsureNumericPointerSafety(qw422016, field)
+//line baked_in.qtpl:30
+	qt422016.ReleaseWriter(qw422016)
+//line baked_in.qtpl:30
+}
+
+//line baked_in.qtpl:30
+func EnsureNumericPointerSafety(field *validator.FieldData) string {
+//line baked_in.qtpl:30
+	qb422016 := qt422016.AcquireByteBuffer()
+//line baked_in.qtpl:30
+	WriteEnsureNumericPointerSafety(qb422016, field)
+//line baked_in.qtpl:30
+	qs422016 := string(qb422016.B)
+//line baked_in.qtpl:30
+	qt422016.ReleaseByteBuffer(qb422016)
+//line baked_in.qtpl:30
+	return qs422016
+//line baked_in.qtpl:30
+}
+
+//line baked_in.qtpl:32
 func StreamHasValueValidation(qw422016 *qt422016.Writer, s *validator.StructData, field *validator.FieldData) {
-//line baked_in.qtpl:3
+//line baked_in.qtpl:32
 	qw422016.N().S(`func () bool {
 `)
-//line baked_in.qtpl:5
+//line baked_in.qtpl:34
 	if field.IsPointer {
-//line baked_in.qtpl:5
+//line baked_in.qtpl:34
 		qw422016.N().S(`	if v.`)
-//line baked_in.qtpl:6
+//line baked_in.qtpl:35
 		qw422016.E().S(field.Name)
-//line baked_in.qtpl:6
+//line baked_in.qtpl:35
 		qw422016.N().S(` == nil {
 		return false
 	}
 `)
-//line baked_in.qtpl:9
+//line baked_in.qtpl:38
 	}
-//line baked_in.qtpl:11
+//line baked_in.qtpl:40
 	var (
 		prefix = ""
 		zero   = ""
@@ -56,345 +180,169 @@ func StreamHasValueValidation(qw422016 *qt422016.Writer, s *validator.StructData
 		zero = `""`
 	}
 
-//line baked_in.qtpl:28
+//line baked_in.qtpl:57
 	if field.IsArray {
-//line baked_in.qtpl:28
+//line baked_in.qtpl:57
 		qw422016.N().S(`	if len(v.`)
-//line baked_in.qtpl:29
+//line baked_in.qtpl:58
 		qw422016.E().S(field.Name)
-//line baked_in.qtpl:29
+//line baked_in.qtpl:58
 		qw422016.N().S(`) == 0 {
 		return false
 	}
 `)
-//line baked_in.qtpl:32
+//line baked_in.qtpl:61
 	} else {
-//line baked_in.qtpl:32
+//line baked_in.qtpl:61
 		qw422016.N().S(`	return `)
-//line baked_in.qtpl:33
+//line baked_in.qtpl:62
 		qw422016.E().S(prefix)
-//line baked_in.qtpl:33
+//line baked_in.qtpl:62
 		qw422016.N().S(`v.`)
-//line baked_in.qtpl:33
+//line baked_in.qtpl:62
 		qw422016.E().S(field.Name)
-//line baked_in.qtpl:33
+//line baked_in.qtpl:62
 		qw422016.N().S(` != `)
-//line baked_in.qtpl:33
+//line baked_in.qtpl:62
 		streamunesc(qw422016, zero)
-//line baked_in.qtpl:33
+//line baked_in.qtpl:62
 		qw422016.N().S(`
 `)
-//line baked_in.qtpl:34
+//line baked_in.qtpl:63
 	}
-//line baked_in.qtpl:34
+//line baked_in.qtpl:63
 	qw422016.N().S(`}`)
-//line baked_in.qtpl:35
+//line baked_in.qtpl:64
 }
-
-//line baked_in.qtpl:35
-func WriteHasValueValidation(qq422016 qtio422016.Writer, s *validator.StructData, field *validator.FieldData) {
-//line baked_in.qtpl:35
-	qw422016 := qt422016.AcquireWriter(qq422016)
-//line baked_in.qtpl:35
-	StreamHasValueValidation(qw422016, s, field)
-//line baked_in.qtpl:35
-	qt422016.ReleaseWriter(qw422016)
-//line baked_in.qtpl:35
-}
-
-//line baked_in.qtpl:35
-func HasValueValidation(s *validator.StructData, field *validator.FieldData) string {
-//line baked_in.qtpl:35
-	qb422016 := qt422016.AcquireByteBuffer()
-//line baked_in.qtpl:35
-	WriteHasValueValidation(qb422016, s, field)
-//line baked_in.qtpl:35
-	qs422016 := string(qb422016.B)
-//line baked_in.qtpl:35
-	qt422016.ReleaseByteBuffer(qb422016)
-//line baked_in.qtpl:35
-	return qs422016
-//line baked_in.qtpl:35
-}
-
-//line baked_in.qtpl:37
-func StreamHasValue(qw422016 *qt422016.Writer, s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData) {
-//line baked_in.qtpl:37
-	qw422016.N().S(`	if !(`)
-//line baked_in.qtpl:38
-	StreamHasValueValidation(qw422016, s, field)
-//line baked_in.qtpl:38
-	qw422016.N().S(`)() {
-		verr = append(verr, validator.NewFieldError(validator.ErrRequired, "required", "`)
-//line baked_in.qtpl:39
-	qw422016.E().J(field.Identifier)
-//line baked_in.qtpl:39
-	qw422016.N().S(`", v.`)
-//line baked_in.qtpl:39
-	qw422016.E().S(field.Name)
-//line baked_in.qtpl:39
-	qw422016.N().S(`))
-	}
-`)
-//line baked_in.qtpl:41
-}
-
-//line baked_in.qtpl:41
-func WriteHasValue(qq422016 qtio422016.Writer, s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData) {
-//line baked_in.qtpl:41
-	qw422016 := qt422016.AcquireWriter(qq422016)
-//line baked_in.qtpl:41
-	StreamHasValue(qw422016, s, field, validation)
-//line baked_in.qtpl:41
-	qt422016.ReleaseWriter(qw422016)
-//line baked_in.qtpl:41
-}
-
-//line baked_in.qtpl:41
-func HasValue(s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData) string {
-//line baked_in.qtpl:41
-	qb422016 := qt422016.AcquireByteBuffer()
-//line baked_in.qtpl:41
-	WriteHasValue(qb422016, s, field, validation)
-//line baked_in.qtpl:41
-	qs422016 := string(qb422016.B)
-//line baked_in.qtpl:41
-	qt422016.ReleaseByteBuffer(qb422016)
-//line baked_in.qtpl:41
-	return qs422016
-//line baked_in.qtpl:41
-}
-
-//line baked_in.qtpl:43
-func StreamIsDefault(qw422016 *qt422016.Writer, s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData) {
-//line baked_in.qtpl:43
-	qw422016.N().S(`	if (`)
-//line baked_in.qtpl:44
-	StreamHasValueValidation(qw422016, s, field)
-//line baked_in.qtpl:44
-	qw422016.N().S(`)() {
-		verr = append(verr, validator.NewFieldError(validator.ErrIsDefault, "`)
-//line baked_in.qtpl:45
-	qw422016.E().J(field.Identifier)
-//line baked_in.qtpl:45
-	qw422016.N().S(`", v.`)
-//line baked_in.qtpl:45
-	qw422016.E().S(field.Name)
-//line baked_in.qtpl:45
-	qw422016.N().S(`))
-	}
-`)
-//line baked_in.qtpl:47
-}
-
-//line baked_in.qtpl:47
-func WriteIsDefault(qq422016 qtio422016.Writer, s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData) {
-//line baked_in.qtpl:47
-	qw422016 := qt422016.AcquireWriter(qq422016)
-//line baked_in.qtpl:47
-	StreamIsDefault(qw422016, s, field, validation)
-//line baked_in.qtpl:47
-	qt422016.ReleaseWriter(qw422016)
-//line baked_in.qtpl:47
-}
-
-//line baked_in.qtpl:47
-func IsDefault(s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData) string {
-//line baked_in.qtpl:47
-	qb422016 := qt422016.AcquireByteBuffer()
-//line baked_in.qtpl:47
-	WriteIsDefault(qb422016, s, field, validation)
-//line baked_in.qtpl:47
-	qs422016 := string(qb422016.B)
-//line baked_in.qtpl:47
-	qt422016.ReleaseByteBuffer(qb422016)
-//line baked_in.qtpl:47
-	return qs422016
-//line baked_in.qtpl:47
-}
-
-//line baked_in.qtpl:49
-func StreamNumberValidation(qw422016 *qt422016.Writer, s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData, sign string) {
-//line baked_in.qtpl:49
-	qw422016.N().S(`func () bool {
-`)
-//line baked_in.qtpl:51
-	if field.IsPointer {
-//line baked_in.qtpl:51
-		qw422016.N().S(`	if v.`)
-//line baked_in.qtpl:52
-		qw422016.E().S(field.Name)
-//line baked_in.qtpl:52
-		qw422016.N().S(` == nil {
-		
-		return true
-	}
-`)
-//line baked_in.qtpl:56
-	}
-//line baked_in.qtpl:58
-	var (
-		prefix = ""
-	)
-	if field.IsPointer {
-		prefix = "*"
-	}
 
 //line baked_in.qtpl:64
-	qw422016.N().S(`	return `)
-//line baked_in.qtpl:65
-	qw422016.E().S(prefix)
-//line baked_in.qtpl:65
-	qw422016.N().S(`v.`)
-//line baked_in.qtpl:65
-	qw422016.E().S(field.Name)
-//line baked_in.qtpl:65
-	qw422016.N().S(` `)
-//line baked_in.qtpl:65
-	streamunesc(qw422016, sign)
-//line baked_in.qtpl:65
-	qw422016.N().S(` `)
-//line baked_in.qtpl:65
-	streamunesc(qw422016, validation.Params[0])
-//line baked_in.qtpl:65
-	qw422016.N().S(`
-}`)
-//line baked_in.qtpl:66
-}
-
-//line baked_in.qtpl:66
-func WriteNumberValidation(qq422016 qtio422016.Writer, s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData, sign string) {
-//line baked_in.qtpl:66
+func WriteHasValueValidation(qq422016 qtio422016.Writer, s *validator.StructData, field *validator.FieldData) {
+//line baked_in.qtpl:64
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line baked_in.qtpl:66
-	StreamNumberValidation(qw422016, s, field, validation, sign)
-//line baked_in.qtpl:66
+//line baked_in.qtpl:64
+	StreamHasValueValidation(qw422016, s, field)
+//line baked_in.qtpl:64
 	qt422016.ReleaseWriter(qw422016)
-//line baked_in.qtpl:66
+//line baked_in.qtpl:64
 }
 
-//line baked_in.qtpl:66
-func NumberValidation(s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData, sign string) string {
-//line baked_in.qtpl:66
+//line baked_in.qtpl:64
+func HasValueValidation(s *validator.StructData, field *validator.FieldData) string {
+//line baked_in.qtpl:64
 	qb422016 := qt422016.AcquireByteBuffer()
-//line baked_in.qtpl:66
-	WriteNumberValidation(qb422016, s, field, validation, sign)
-//line baked_in.qtpl:66
+//line baked_in.qtpl:64
+	WriteHasValueValidation(qb422016, s, field)
+//line baked_in.qtpl:64
 	qs422016 := string(qb422016.B)
-//line baked_in.qtpl:66
+//line baked_in.qtpl:64
 	qt422016.ReleaseByteBuffer(qb422016)
-//line baked_in.qtpl:66
+//line baked_in.qtpl:64
 	return qs422016
-//line baked_in.qtpl:66
+//line baked_in.qtpl:64
 }
 
-//line baked_in.qtpl:68
-func StreamGte(qw422016 *qt422016.Writer, s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData) {
-//line baked_in.qtpl:68
-	qw422016.N().S(`	if (`)
-//line baked_in.qtpl:69
-	StreamNumberValidation(qw422016, s, field, validation, ">=")
-//line baked_in.qtpl:69
+//line baked_in.qtpl:66
+func StreamHasValue(qw422016 *qt422016.Writer, s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData) {
+//line baked_in.qtpl:66
+	qw422016.N().S(`	if !(`)
+//line baked_in.qtpl:67
+	StreamHasValueValidation(qw422016, s, field)
+//line baked_in.qtpl:67
 	qw422016.N().S(`)() {
-		verr = append(verr, validator.NewFieldError(validator.ErrIsDefault, "gte", "`)
-//line baked_in.qtpl:70
+		verr = append(verr, validator.NewFieldError(validator.ErrRequired, "required", "`)
+//line baked_in.qtpl:68
 	qw422016.E().J(field.Identifier)
-//line baked_in.qtpl:70
+//line baked_in.qtpl:68
 	qw422016.N().S(`", v.`)
-//line baked_in.qtpl:70
+//line baked_in.qtpl:68
 	qw422016.E().S(field.Name)
-//line baked_in.qtpl:70
+//line baked_in.qtpl:68
 	qw422016.N().S(`))
 	}
 `)
-//line baked_in.qtpl:72
+//line baked_in.qtpl:70
 }
 
-//line baked_in.qtpl:72
-func WriteGte(qq422016 qtio422016.Writer, s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData) {
-//line baked_in.qtpl:72
+//line baked_in.qtpl:70
+func WriteHasValue(qq422016 qtio422016.Writer, s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData) {
+//line baked_in.qtpl:70
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line baked_in.qtpl:72
-	StreamGte(qw422016, s, field, validation)
-//line baked_in.qtpl:72
+//line baked_in.qtpl:70
+	StreamHasValue(qw422016, s, field, validation)
+//line baked_in.qtpl:70
 	qt422016.ReleaseWriter(qw422016)
-//line baked_in.qtpl:72
+//line baked_in.qtpl:70
 }
 
-//line baked_in.qtpl:72
-func Gte(s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData) string {
-//line baked_in.qtpl:72
+//line baked_in.qtpl:70
+func HasValue(s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData) string {
+//line baked_in.qtpl:70
 	qb422016 := qt422016.AcquireByteBuffer()
-//line baked_in.qtpl:72
-	WriteGte(qb422016, s, field, validation)
-//line baked_in.qtpl:72
+//line baked_in.qtpl:70
+	WriteHasValue(qb422016, s, field, validation)
+//line baked_in.qtpl:70
 	qs422016 := string(qb422016.B)
-//line baked_in.qtpl:72
+//line baked_in.qtpl:70
 	qt422016.ReleaseByteBuffer(qb422016)
-//line baked_in.qtpl:72
+//line baked_in.qtpl:70
 	return qs422016
-//line baked_in.qtpl:72
+//line baked_in.qtpl:70
 }
 
-//line baked_in.qtpl:74
-func StreamLte(qw422016 *qt422016.Writer, s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData) {
-//line baked_in.qtpl:74
+//line baked_in.qtpl:72
+func StreamIsDefault(qw422016 *qt422016.Writer, s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData) {
+//line baked_in.qtpl:72
 	qw422016.N().S(`	if (`)
-//line baked_in.qtpl:75
-	StreamNumberValidation(qw422016, s, field, validation, "<=")
-//line baked_in.qtpl:75
+//line baked_in.qtpl:73
+	StreamHasValueValidation(qw422016, s, field)
+//line baked_in.qtpl:73
 	qw422016.N().S(`)() {
-		verr = append(verr, validator.NewFieldError(validator.ErrIsDefault, "lte", "`)
-//line baked_in.qtpl:76
+		verr = append(verr, validator.NewFieldError(validator.ErrIsDefault, "`)
+//line baked_in.qtpl:74
 	qw422016.E().J(field.Identifier)
-//line baked_in.qtpl:76
+//line baked_in.qtpl:74
 	qw422016.N().S(`", v.`)
-//line baked_in.qtpl:76
+//line baked_in.qtpl:74
 	qw422016.E().S(field.Name)
-//line baked_in.qtpl:76
+//line baked_in.qtpl:74
 	qw422016.N().S(`))
 	}
 `)
-//line baked_in.qtpl:78
+//line baked_in.qtpl:76
 }
 
-//line baked_in.qtpl:78
-func WriteLte(qq422016 qtio422016.Writer, s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData) {
-//line baked_in.qtpl:78
+//line baked_in.qtpl:76
+func WriteIsDefault(qq422016 qtio422016.Writer, s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData) {
+//line baked_in.qtpl:76
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line baked_in.qtpl:78
-	StreamLte(qw422016, s, field, validation)
-//line baked_in.qtpl:78
+//line baked_in.qtpl:76
+	StreamIsDefault(qw422016, s, field, validation)
+//line baked_in.qtpl:76
 	qt422016.ReleaseWriter(qw422016)
-//line baked_in.qtpl:78
+//line baked_in.qtpl:76
 }
 
-//line baked_in.qtpl:78
-func Lte(s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData) string {
-//line baked_in.qtpl:78
+//line baked_in.qtpl:76
+func IsDefault(s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData) string {
+//line baked_in.qtpl:76
 	qb422016 := qt422016.AcquireByteBuffer()
-//line baked_in.qtpl:78
-	WriteLte(qb422016, s, field, validation)
-//line baked_in.qtpl:78
+//line baked_in.qtpl:76
+	WriteIsDefault(qb422016, s, field, validation)
+//line baked_in.qtpl:76
 	qs422016 := string(qb422016.B)
-//line baked_in.qtpl:78
+//line baked_in.qtpl:76
 	qt422016.ReleaseByteBuffer(qb422016)
-//line baked_in.qtpl:78
+//line baked_in.qtpl:76
 	return qs422016
-//line baked_in.qtpl:78
+//line baked_in.qtpl:76
 }
 
-//line baked_in.qtpl:81
-func StreamRegexValidation(qw422016 *qt422016.Writer, s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData, regexpRule string) {
-//line baked_in.qtpl:81
+//line baked_in.qtpl:78
+func StreamNumberValidation(qw422016 *qt422016.Writer, s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData, sign string) {
+//line baked_in.qtpl:78
 	qw422016.N().S(`func () bool {
-	`)
-//line baked_in.qtpl:83
-	StreamEnsureStringPointerSafety(qw422016, field)
-//line baked_in.qtpl:83
-	qw422016.N().S(`
 `)
-//line baked_in.qtpl:85
+//line baked_in.qtpl:81
 	var (
 		prefix = ""
 	)
@@ -402,52 +350,80 @@ func StreamRegexValidation(qw422016 *qt422016.Writer, s *validator.StructData, f
 		prefix = "*"
 	}
 
-//line baked_in.qtpl:91
-	qw422016.N().S(`	return `)
-//line baked_in.qtpl:92
-	qw422016.E().S(regexpRule)
-//line baked_in.qtpl:92
-	qw422016.N().S(`.MatchString(`)
-//line baked_in.qtpl:92
+//line baked_in.qtpl:87
+	qw422016.N().S(`	if `)
+//line baked_in.qtpl:88
+	if field.IsPointer {
+//line baked_in.qtpl:88
+		qw422016.N().S(`v.`)
+//line baked_in.qtpl:88
+		qw422016.E().S(field.Name)
+//line baked_in.qtpl:88
+		qw422016.N().S(` == nil || `)
+//line baked_in.qtpl:88
+	}
+//line baked_in.qtpl:88
 	qw422016.E().S(prefix)
-//line baked_in.qtpl:92
+//line baked_in.qtpl:88
 	qw422016.N().S(`v.`)
-//line baked_in.qtpl:92
+//line baked_in.qtpl:88
 	qw422016.E().S(field.Name)
-//line baked_in.qtpl:92
-	qw422016.N().S(`)
+//line baked_in.qtpl:88
+	qw422016.N().S(` == 0 {
+		return true
+	}
+	return `)
+//line baked_in.qtpl:91
+	qw422016.E().S(prefix)
+//line baked_in.qtpl:91
+	qw422016.N().S(`v.`)
+//line baked_in.qtpl:91
+	qw422016.E().S(field.Name)
+//line baked_in.qtpl:91
+	qw422016.N().S(` `)
+//line baked_in.qtpl:91
+	streamunesc(qw422016, sign)
+//line baked_in.qtpl:91
+	qw422016.N().S(` `)
+//line baked_in.qtpl:91
+	streamunesc(qw422016, validation.Params[0])
+//line baked_in.qtpl:91
+	qw422016.N().S(`
 }`)
-//line baked_in.qtpl:93
+//line baked_in.qtpl:92
 }
 
-//line baked_in.qtpl:93
-func WriteRegexValidation(qq422016 qtio422016.Writer, s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData, regexpRule string) {
-//line baked_in.qtpl:93
+//line baked_in.qtpl:92
+func WriteNumberValidation(qq422016 qtio422016.Writer, s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData, sign string) {
+//line baked_in.qtpl:92
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line baked_in.qtpl:93
-	StreamRegexValidation(qw422016, s, field, validation, regexpRule)
-//line baked_in.qtpl:93
+//line baked_in.qtpl:92
+	StreamNumberValidation(qw422016, s, field, validation, sign)
+//line baked_in.qtpl:92
 	qt422016.ReleaseWriter(qw422016)
-//line baked_in.qtpl:93
+//line baked_in.qtpl:92
 }
 
-//line baked_in.qtpl:93
-func RegexValidation(s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData, regexpRule string) string {
-//line baked_in.qtpl:93
+//line baked_in.qtpl:92
+func NumberValidation(s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData, sign string) string {
+//line baked_in.qtpl:92
 	qb422016 := qt422016.AcquireByteBuffer()
-//line baked_in.qtpl:93
-	WriteRegexValidation(qb422016, s, field, validation, regexpRule)
-//line baked_in.qtpl:93
+//line baked_in.qtpl:92
+	WriteNumberValidation(qb422016, s, field, validation, sign)
+//line baked_in.qtpl:92
 	qs422016 := string(qb422016.B)
-//line baked_in.qtpl:93
+//line baked_in.qtpl:92
 	qt422016.ReleaseByteBuffer(qb422016)
-//line baked_in.qtpl:93
+//line baked_in.qtpl:92
 	return qs422016
-//line baked_in.qtpl:93
+//line baked_in.qtpl:92
 }
 
-//line baked_in.qtpl:95
-func StreamEnsureStringPointerSafety(qw422016 *qt422016.Writer, field *validator.FieldData) {
+//line baked_in.qtpl:94
+func StreamLenValidation(qw422016 *qt422016.Writer, s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData, sign string) {
+//line baked_in.qtpl:94
+	qw422016.N().S(`func () bool {
+`)
 //line baked_in.qtpl:97
 	var (
 		prefix = ""
@@ -456,258 +432,599 @@ func StreamEnsureStringPointerSafety(qw422016 *qt422016.Writer, field *validator
 		prefix = "*"
 	}
 
-//line baked_in.qtpl:103
-	qw422016.N().S(`	if `)
 //line baked_in.qtpl:104
-	if field.IsPointer {
+	if field.IsString && field.IsPointer {
 //line baked_in.qtpl:104
+		qw422016.N().S(`	if `)
+//line baked_in.qtpl:105
+		if field.IsPointer {
+//line baked_in.qtpl:105
+			qw422016.N().S(`v.`)
+//line baked_in.qtpl:105
+			qw422016.E().S(field.Name)
+//line baked_in.qtpl:105
+			qw422016.N().S(` == nil || `)
+//line baked_in.qtpl:105
+		}
+//line baked_in.qtpl:105
+		qw422016.E().S(prefix)
+//line baked_in.qtpl:105
 		qw422016.N().S(`v.`)
-//line baked_in.qtpl:104
+//line baked_in.qtpl:105
 		qw422016.E().S(field.Name)
-//line baked_in.qtpl:104
-		qw422016.N().S(` == nil || `)
-//line baked_in.qtpl:104
-	}
-//line baked_in.qtpl:104
-	qw422016.E().S(prefix)
-//line baked_in.qtpl:104
-	qw422016.N().S(`v.`)
-//line baked_in.qtpl:104
-	qw422016.E().S(field.Name)
-//line baked_in.qtpl:104
-	qw422016.N().S(` == "" {
+//line baked_in.qtpl:105
+		qw422016.N().S(` == "" {
 		return true
 	}
 `)
-//line baked_in.qtpl:107
+//line baked_in.qtpl:108
+	}
+//line baked_in.qtpl:108
+	qw422016.N().S(`	return len(`)
+//line baked_in.qtpl:109
+	qw422016.E().S(prefix)
+//line baked_in.qtpl:109
+	qw422016.N().S(`v.`)
+//line baked_in.qtpl:109
+	qw422016.E().S(field.Name)
+//line baked_in.qtpl:109
+	qw422016.N().S(`) == 0 || len(`)
+//line baked_in.qtpl:109
+	qw422016.E().S(prefix)
+//line baked_in.qtpl:109
+	qw422016.N().S(`v.`)
+//line baked_in.qtpl:109
+	qw422016.E().S(field.Name)
+//line baked_in.qtpl:109
+	qw422016.N().S(`) `)
+//line baked_in.qtpl:109
+	streamunesc(qw422016, sign)
+//line baked_in.qtpl:109
+	qw422016.N().S(` `)
+//line baked_in.qtpl:109
+	streamunesc(qw422016, validation.Params[0])
+//line baked_in.qtpl:109
+	qw422016.N().S(`
+}`)
+//line baked_in.qtpl:110
 }
 
-//line baked_in.qtpl:107
-func WriteEnsureStringPointerSafety(qq422016 qtio422016.Writer, field *validator.FieldData) {
-//line baked_in.qtpl:107
+//line baked_in.qtpl:110
+func WriteLenValidation(qq422016 qtio422016.Writer, s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData, sign string) {
+//line baked_in.qtpl:110
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line baked_in.qtpl:107
-	StreamEnsureStringPointerSafety(qw422016, field)
-//line baked_in.qtpl:107
+//line baked_in.qtpl:110
+	StreamLenValidation(qw422016, s, field, validation, sign)
+//line baked_in.qtpl:110
 	qt422016.ReleaseWriter(qw422016)
-//line baked_in.qtpl:107
+//line baked_in.qtpl:110
 }
 
-//line baked_in.qtpl:107
-func EnsureStringPointerSafety(field *validator.FieldData) string {
-//line baked_in.qtpl:107
+//line baked_in.qtpl:110
+func LenValidation(s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData, sign string) string {
+//line baked_in.qtpl:110
 	qb422016 := qt422016.AcquireByteBuffer()
-//line baked_in.qtpl:107
-	WriteEnsureStringPointerSafety(qb422016, field)
-//line baked_in.qtpl:107
+//line baked_in.qtpl:110
+	WriteLenValidation(qb422016, s, field, validation, sign)
+//line baked_in.qtpl:110
 	qs422016 := string(qb422016.B)
-//line baked_in.qtpl:107
+//line baked_in.qtpl:110
 	qt422016.ReleaseByteBuffer(qb422016)
-//line baked_in.qtpl:107
+//line baked_in.qtpl:110
 	return qs422016
-//line baked_in.qtpl:107
+//line baked_in.qtpl:110
 }
 
-//line baked_in.qtpl:109
+//line baked_in.qtpl:112
+func StreamGte(qw422016 *qt422016.Writer, s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData) {
+//line baked_in.qtpl:112
+	qw422016.N().S(`	if (`)
+//line baked_in.qtpl:113
+	StreamNumberValidation(qw422016, s, field, validation, ">=")
+//line baked_in.qtpl:113
+	qw422016.N().S(`)() {
+		verr = append(verr, validator.NewFieldError(validator.ErrIsDefault, "gte", "`)
+//line baked_in.qtpl:114
+	qw422016.E().J(field.Identifier)
+//line baked_in.qtpl:114
+	qw422016.N().S(`", v.`)
+//line baked_in.qtpl:114
+	qw422016.E().S(field.Name)
+//line baked_in.qtpl:114
+	qw422016.N().S(`))
+	}
+`)
+//line baked_in.qtpl:116
+}
+
+//line baked_in.qtpl:116
+func WriteGte(qq422016 qtio422016.Writer, s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData) {
+//line baked_in.qtpl:116
+	qw422016 := qt422016.AcquireWriter(qq422016)
+//line baked_in.qtpl:116
+	StreamGte(qw422016, s, field, validation)
+//line baked_in.qtpl:116
+	qt422016.ReleaseWriter(qw422016)
+//line baked_in.qtpl:116
+}
+
+//line baked_in.qtpl:116
+func Gte(s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData) string {
+//line baked_in.qtpl:116
+	qb422016 := qt422016.AcquireByteBuffer()
+//line baked_in.qtpl:116
+	WriteGte(qb422016, s, field, validation)
+//line baked_in.qtpl:116
+	qs422016 := string(qb422016.B)
+//line baked_in.qtpl:116
+	qt422016.ReleaseByteBuffer(qb422016)
+//line baked_in.qtpl:116
+	return qs422016
+//line baked_in.qtpl:116
+}
+
+//line baked_in.qtpl:118
+func StreamLte(qw422016 *qt422016.Writer, s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData) {
+//line baked_in.qtpl:118
+	qw422016.N().S(`	if (`)
+//line baked_in.qtpl:119
+	StreamNumberValidation(qw422016, s, field, validation, "<=")
+//line baked_in.qtpl:119
+	qw422016.N().S(`)() {
+		verr = append(verr, validator.NewFieldError(validator.ErrIsDefault, "lte", "`)
+//line baked_in.qtpl:120
+	qw422016.E().J(field.Identifier)
+//line baked_in.qtpl:120
+	qw422016.N().S(`", v.`)
+//line baked_in.qtpl:120
+	qw422016.E().S(field.Name)
+//line baked_in.qtpl:120
+	qw422016.N().S(`))
+	}
+`)
+//line baked_in.qtpl:122
+}
+
+//line baked_in.qtpl:122
+func WriteLte(qq422016 qtio422016.Writer, s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData) {
+//line baked_in.qtpl:122
+	qw422016 := qt422016.AcquireWriter(qq422016)
+//line baked_in.qtpl:122
+	StreamLte(qw422016, s, field, validation)
+//line baked_in.qtpl:122
+	qt422016.ReleaseWriter(qw422016)
+//line baked_in.qtpl:122
+}
+
+//line baked_in.qtpl:122
+func Lte(s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData) string {
+//line baked_in.qtpl:122
+	qb422016 := qt422016.AcquireByteBuffer()
+//line baked_in.qtpl:122
+	WriteLte(qb422016, s, field, validation)
+//line baked_in.qtpl:122
+	qs422016 := string(qb422016.B)
+//line baked_in.qtpl:122
+	qt422016.ReleaseByteBuffer(qb422016)
+//line baked_in.qtpl:122
+	return qs422016
+//line baked_in.qtpl:122
+}
+
+//line baked_in.qtpl:124
+func StreamRegexValidation(qw422016 *qt422016.Writer, s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData, regexpRule string) {
+//line baked_in.qtpl:124
+	qw422016.N().S(`func () bool {
+	`)
+//line baked_in.qtpl:126
+	StreamEnsureStringPointerSafety(qw422016, field)
+//line baked_in.qtpl:126
+	qw422016.N().S(`
+`)
+//line baked_in.qtpl:128
+	var (
+		prefix = ""
+	)
+	if field.IsPointer {
+		prefix = "*"
+	}
+
+//line baked_in.qtpl:134
+	qw422016.N().S(`	return `)
+//line baked_in.qtpl:135
+	qw422016.E().S(regexpRule)
+//line baked_in.qtpl:135
+	qw422016.N().S(`.MatchString(`)
+//line baked_in.qtpl:135
+	qw422016.E().S(prefix)
+//line baked_in.qtpl:135
+	qw422016.N().S(`v.`)
+//line baked_in.qtpl:135
+	qw422016.E().S(field.Name)
+//line baked_in.qtpl:135
+	qw422016.N().S(`)
+}`)
+//line baked_in.qtpl:136
+}
+
+//line baked_in.qtpl:136
+func WriteRegexValidation(qq422016 qtio422016.Writer, s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData, regexpRule string) {
+//line baked_in.qtpl:136
+	qw422016 := qt422016.AcquireWriter(qq422016)
+//line baked_in.qtpl:136
+	StreamRegexValidation(qw422016, s, field, validation, regexpRule)
+//line baked_in.qtpl:136
+	qt422016.ReleaseWriter(qw422016)
+//line baked_in.qtpl:136
+}
+
+//line baked_in.qtpl:136
+func RegexValidation(s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData, regexpRule string) string {
+//line baked_in.qtpl:136
+	qb422016 := qt422016.AcquireByteBuffer()
+//line baked_in.qtpl:136
+	WriteRegexValidation(qb422016, s, field, validation, regexpRule)
+//line baked_in.qtpl:136
+	qs422016 := string(qb422016.B)
+//line baked_in.qtpl:136
+	qt422016.ReleaseByteBuffer(qb422016)
+//line baked_in.qtpl:136
+	return qs422016
+//line baked_in.qtpl:136
+}
+
+//line baked_in.qtpl:138
 func StreamEmail(qw422016 *qt422016.Writer, s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData) {
-//line baked_in.qtpl:109
+//line baked_in.qtpl:138
 	qw422016.N().S(`	if !(`)
-//line baked_in.qtpl:110
+//line baked_in.qtpl:139
 	StreamRegexValidation(qw422016, s, field, validation, "validator.EmailRegex")
-//line baked_in.qtpl:110
+//line baked_in.qtpl:139
 	qw422016.N().S(`)() {
 		verr = append(verr, validator.NewFieldError(validator.ErrEmail, "email", "`)
-//line baked_in.qtpl:111
+//line baked_in.qtpl:140
 	qw422016.E().J(field.Identifier)
-//line baked_in.qtpl:111
+//line baked_in.qtpl:140
 	qw422016.N().S(`", v.`)
-//line baked_in.qtpl:111
+//line baked_in.qtpl:140
 	qw422016.E().S(field.Name)
-//line baked_in.qtpl:111
+//line baked_in.qtpl:140
 	qw422016.N().S(`))
 	}
 `)
-//line baked_in.qtpl:113
+//line baked_in.qtpl:142
 }
 
-//line baked_in.qtpl:113
+//line baked_in.qtpl:142
 func WriteEmail(qq422016 qtio422016.Writer, s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData) {
-//line baked_in.qtpl:113
+//line baked_in.qtpl:142
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line baked_in.qtpl:113
+//line baked_in.qtpl:142
 	StreamEmail(qw422016, s, field, validation)
-//line baked_in.qtpl:113
+//line baked_in.qtpl:142
 	qt422016.ReleaseWriter(qw422016)
-//line baked_in.qtpl:113
+//line baked_in.qtpl:142
 }
 
-//line baked_in.qtpl:113
+//line baked_in.qtpl:142
 func Email(s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData) string {
-//line baked_in.qtpl:113
+//line baked_in.qtpl:142
 	qb422016 := qt422016.AcquireByteBuffer()
-//line baked_in.qtpl:113
+//line baked_in.qtpl:142
 	WriteEmail(qb422016, s, field, validation)
-//line baked_in.qtpl:113
+//line baked_in.qtpl:142
 	qs422016 := string(qb422016.B)
-//line baked_in.qtpl:113
+//line baked_in.qtpl:142
 	qt422016.ReleaseByteBuffer(qb422016)
-//line baked_in.qtpl:113
+//line baked_in.qtpl:142
 	return qs422016
-//line baked_in.qtpl:113
+//line baked_in.qtpl:142
 }
 
-//line baked_in.qtpl:115
+//line baked_in.qtpl:144
+func StreamMin(qw422016 *qt422016.Writer, s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData) {
+//line baked_in.qtpl:145
+	if field.IsNumeric {
+//line baked_in.qtpl:145
+		qw422016.N().S(`	if !(`)
+//line baked_in.qtpl:146
+		StreamNumberValidation(qw422016, s, field, validation, ">=")
+//line baked_in.qtpl:146
+		qw422016.N().S(`)() {
+		verr = append(verr, validator.NewFieldError(validator.ErrMin, "min", "`)
+//line baked_in.qtpl:147
+		qw422016.E().J(field.Identifier)
+//line baked_in.qtpl:147
+		qw422016.N().S(`", v.`)
+//line baked_in.qtpl:147
+		qw422016.E().S(field.Name)
+//line baked_in.qtpl:147
+		qw422016.N().S(`))
+	}
+`)
+//line baked_in.qtpl:149
+	} else if field.IsArray || field.IsString {
+//line baked_in.qtpl:149
+		qw422016.N().S(`	if !(`)
+//line baked_in.qtpl:150
+		StreamLenValidation(qw422016, s, field, validation, ">=")
+//line baked_in.qtpl:150
+		qw422016.N().S(`)() {
+		verr = append(verr, validator.NewFieldError(validator.ErrMin, "min", "`)
+//line baked_in.qtpl:151
+		qw422016.E().J(field.Identifier)
+//line baked_in.qtpl:151
+		qw422016.N().S(`", v.`)
+//line baked_in.qtpl:151
+		qw422016.E().S(field.Name)
+//line baked_in.qtpl:151
+		qw422016.N().S(`))
+	}
+`)
+//line baked_in.qtpl:153
+	} else {
+//line baked_in.qtpl:155
+		panic("field must be numeric, array or string")
+
+//line baked_in.qtpl:157
+	}
+//line baked_in.qtpl:158
+}
+
+//line baked_in.qtpl:158
+func WriteMin(qq422016 qtio422016.Writer, s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData) {
+//line baked_in.qtpl:158
+	qw422016 := qt422016.AcquireWriter(qq422016)
+//line baked_in.qtpl:158
+	StreamMin(qw422016, s, field, validation)
+//line baked_in.qtpl:158
+	qt422016.ReleaseWriter(qw422016)
+//line baked_in.qtpl:158
+}
+
+//line baked_in.qtpl:158
+func Min(s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData) string {
+//line baked_in.qtpl:158
+	qb422016 := qt422016.AcquireByteBuffer()
+//line baked_in.qtpl:158
+	WriteMin(qb422016, s, field, validation)
+//line baked_in.qtpl:158
+	qs422016 := string(qb422016.B)
+//line baked_in.qtpl:158
+	qt422016.ReleaseByteBuffer(qb422016)
+//line baked_in.qtpl:158
+	return qs422016
+//line baked_in.qtpl:158
+}
+
+//line baked_in.qtpl:160
+func StreamMax(qw422016 *qt422016.Writer, s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData) {
+//line baked_in.qtpl:161
+	if field.IsNumeric {
+//line baked_in.qtpl:161
+		qw422016.N().S(`	if !(`)
+//line baked_in.qtpl:162
+		StreamNumberValidation(qw422016, s, field, validation, "<=")
+//line baked_in.qtpl:162
+		qw422016.N().S(`)() {
+		verr = append(verr, validator.NewFieldError(validator.ErrMax, "max", "`)
+//line baked_in.qtpl:163
+		qw422016.E().J(field.Identifier)
+//line baked_in.qtpl:163
+		qw422016.N().S(`", v.`)
+//line baked_in.qtpl:163
+		qw422016.E().S(field.Name)
+//line baked_in.qtpl:163
+		qw422016.N().S(`))
+	}
+`)
+//line baked_in.qtpl:165
+	} else if field.IsArray || field.IsString {
+//line baked_in.qtpl:165
+		qw422016.N().S(`	if !(`)
+//line baked_in.qtpl:166
+		StreamLenValidation(qw422016, s, field, validation, "<=")
+//line baked_in.qtpl:166
+		qw422016.N().S(`)() {
+		verr = append(verr, validator.NewFieldError(validator.ErrMax, "max", "`)
+//line baked_in.qtpl:167
+		qw422016.E().J(field.Identifier)
+//line baked_in.qtpl:167
+		qw422016.N().S(`", v.`)
+//line baked_in.qtpl:167
+		qw422016.E().S(field.Name)
+//line baked_in.qtpl:167
+		qw422016.N().S(`))
+	}
+`)
+//line baked_in.qtpl:169
+	} else {
+//line baked_in.qtpl:171
+		panic("field must be numeric, array or string")
+
+//line baked_in.qtpl:173
+	}
+//line baked_in.qtpl:174
+}
+
+//line baked_in.qtpl:174
+func WriteMax(qq422016 qtio422016.Writer, s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData) {
+//line baked_in.qtpl:174
+	qw422016 := qt422016.AcquireWriter(qq422016)
+//line baked_in.qtpl:174
+	StreamMax(qw422016, s, field, validation)
+//line baked_in.qtpl:174
+	qt422016.ReleaseWriter(qw422016)
+//line baked_in.qtpl:174
+}
+
+//line baked_in.qtpl:174
+func Max(s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData) string {
+//line baked_in.qtpl:174
+	qb422016 := qt422016.AcquireByteBuffer()
+//line baked_in.qtpl:174
+	WriteMax(qb422016, s, field, validation)
+//line baked_in.qtpl:174
+	qs422016 := string(qb422016.B)
+//line baked_in.qtpl:174
+	qt422016.ReleaseByteBuffer(qb422016)
+//line baked_in.qtpl:174
+	return qs422016
+//line baked_in.qtpl:174
+}
+
+//line baked_in.qtpl:176
 func StreamHexcolor(qw422016 *qt422016.Writer, s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData) {
-//line baked_in.qtpl:115
+//line baked_in.qtpl:176
 	qw422016.N().S(`	if v.`)
-//line baked_in.qtpl:116
+//line baked_in.qtpl:177
 	qw422016.E().S(field.Name)
-//line baked_in.qtpl:116
+//line baked_in.qtpl:177
 	qw422016.N().S(` != "" && !(`)
-//line baked_in.qtpl:116
+//line baked_in.qtpl:177
 	StreamRegexValidation(qw422016, s, field, validation, "validator.HexcolorRegex")
-//line baked_in.qtpl:116
+//line baked_in.qtpl:177
 	qw422016.N().S(`)() {
 		verr = append(verr, validator.NewFieldError(validator.ErrIsDefault, "hexcolor", "`)
-//line baked_in.qtpl:117
+//line baked_in.qtpl:178
 	qw422016.E().J(field.Identifier)
-//line baked_in.qtpl:117
+//line baked_in.qtpl:178
 	qw422016.N().S(`", v.`)
-//line baked_in.qtpl:117
+//line baked_in.qtpl:178
 	qw422016.E().S(field.Name)
-//line baked_in.qtpl:117
+//line baked_in.qtpl:178
 	qw422016.N().S(`))
 	}
 `)
-//line baked_in.qtpl:119
+//line baked_in.qtpl:180
 }
 
-//line baked_in.qtpl:119
+//line baked_in.qtpl:180
 func WriteHexcolor(qq422016 qtio422016.Writer, s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData) {
-//line baked_in.qtpl:119
+//line baked_in.qtpl:180
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line baked_in.qtpl:119
+//line baked_in.qtpl:180
 	StreamHexcolor(qw422016, s, field, validation)
-//line baked_in.qtpl:119
+//line baked_in.qtpl:180
 	qt422016.ReleaseWriter(qw422016)
-//line baked_in.qtpl:119
+//line baked_in.qtpl:180
 }
 
-//line baked_in.qtpl:119
+//line baked_in.qtpl:180
 func Hexcolor(s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData) string {
-//line baked_in.qtpl:119
+//line baked_in.qtpl:180
 	qb422016 := qt422016.AcquireByteBuffer()
-//line baked_in.qtpl:119
+//line baked_in.qtpl:180
 	WriteHexcolor(qb422016, s, field, validation)
-//line baked_in.qtpl:119
+//line baked_in.qtpl:180
 	qs422016 := string(qb422016.B)
-//line baked_in.qtpl:119
+//line baked_in.qtpl:180
 	qt422016.ReleaseByteBuffer(qb422016)
-//line baked_in.qtpl:119
+//line baked_in.qtpl:180
 	return qs422016
-//line baked_in.qtpl:119
+//line baked_in.qtpl:180
 }
 
-//line baked_in.qtpl:121
+//line baked_in.qtpl:182
 func StreamRGBa(qw422016 *qt422016.Writer, s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData) {
-//line baked_in.qtpl:121
+//line baked_in.qtpl:182
 	qw422016.N().S(`	if v.`)
-//line baked_in.qtpl:122
+//line baked_in.qtpl:183
 	qw422016.E().S(field.Name)
-//line baked_in.qtpl:122
+//line baked_in.qtpl:183
 	qw422016.N().S(` != "" && !(`)
-//line baked_in.qtpl:122
+//line baked_in.qtpl:183
 	StreamRegexValidation(qw422016, s, field, validation, "validator.RgbaRegex")
-//line baked_in.qtpl:122
+//line baked_in.qtpl:183
 	qw422016.N().S(`)() {
 		verr = append(verr, validator.NewFieldError(validator.ErrIsDefault, "rgba", "`)
-//line baked_in.qtpl:123
+//line baked_in.qtpl:184
 	qw422016.E().J(field.Identifier)
-//line baked_in.qtpl:123
+//line baked_in.qtpl:184
 	qw422016.N().S(`", v.`)
-//line baked_in.qtpl:123
+//line baked_in.qtpl:184
 	qw422016.E().S(field.Name)
-//line baked_in.qtpl:123
+//line baked_in.qtpl:184
 	qw422016.N().S(`))
 	}
 `)
-//line baked_in.qtpl:125
+//line baked_in.qtpl:186
 }
 
-//line baked_in.qtpl:125
+//line baked_in.qtpl:186
 func WriteRGBa(qq422016 qtio422016.Writer, s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData) {
-//line baked_in.qtpl:125
+//line baked_in.qtpl:186
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line baked_in.qtpl:125
+//line baked_in.qtpl:186
 	StreamRGBa(qw422016, s, field, validation)
-//line baked_in.qtpl:125
+//line baked_in.qtpl:186
 	qt422016.ReleaseWriter(qw422016)
-//line baked_in.qtpl:125
+//line baked_in.qtpl:186
 }
 
-//line baked_in.qtpl:125
+//line baked_in.qtpl:186
 func RGBa(s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData) string {
-//line baked_in.qtpl:125
+//line baked_in.qtpl:186
 	qb422016 := qt422016.AcquireByteBuffer()
-//line baked_in.qtpl:125
+//line baked_in.qtpl:186
 	WriteRGBa(qb422016, s, field, validation)
-//line baked_in.qtpl:125
+//line baked_in.qtpl:186
 	qs422016 := string(qb422016.B)
-//line baked_in.qtpl:125
+//line baked_in.qtpl:186
 	qt422016.ReleaseByteBuffer(qb422016)
-//line baked_in.qtpl:125
+//line baked_in.qtpl:186
 	return qs422016
-//line baked_in.qtpl:125
+//line baked_in.qtpl:186
 }
 
-//line baked_in.qtpl:127
+//line baked_in.qtpl:188
 func StreamRGB(qw422016 *qt422016.Writer, s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData) {
-//line baked_in.qtpl:127
+//line baked_in.qtpl:188
 	qw422016.N().S(`	if v.`)
-//line baked_in.qtpl:128
+//line baked_in.qtpl:189
 	qw422016.E().S(field.Name)
-//line baked_in.qtpl:128
+//line baked_in.qtpl:189
 	qw422016.N().S(` != "" && !(`)
-//line baked_in.qtpl:128
+//line baked_in.qtpl:189
 	StreamRegexValidation(qw422016, s, field, validation, "validator.RgbRegex")
-//line baked_in.qtpl:128
+//line baked_in.qtpl:189
 	qw422016.N().S(`)() {
 		verr = append(verr, validator.NewFieldError(validator.ErrIsDefault, "rgb", "`)
-//line baked_in.qtpl:129
+//line baked_in.qtpl:190
 	qw422016.E().J(field.Identifier)
-//line baked_in.qtpl:129
+//line baked_in.qtpl:190
 	qw422016.N().S(`", v.`)
-//line baked_in.qtpl:129
+//line baked_in.qtpl:190
 	qw422016.E().S(field.Name)
-//line baked_in.qtpl:129
+//line baked_in.qtpl:190
 	qw422016.N().S(`))
 	}
 `)
-//line baked_in.qtpl:131
+//line baked_in.qtpl:192
 }
 
-//line baked_in.qtpl:131
+//line baked_in.qtpl:192
 func WriteRGB(qq422016 qtio422016.Writer, s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData) {
-//line baked_in.qtpl:131
+//line baked_in.qtpl:192
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line baked_in.qtpl:131
+//line baked_in.qtpl:192
 	StreamRGB(qw422016, s, field, validation)
-//line baked_in.qtpl:131
+//line baked_in.qtpl:192
 	qt422016.ReleaseWriter(qw422016)
-//line baked_in.qtpl:131
+//line baked_in.qtpl:192
 }
 
-//line baked_in.qtpl:131
+//line baked_in.qtpl:192
 func RGB(s *validator.StructData, field *validator.FieldData, validation *validator.ValidationData) string {
-//line baked_in.qtpl:131
+//line baked_in.qtpl:192
 	qb422016 := qt422016.AcquireByteBuffer()
-//line baked_in.qtpl:131
+//line baked_in.qtpl:192
 	WriteRGB(qb422016, s, field, validation)
-//line baked_in.qtpl:131
+//line baked_in.qtpl:192
 	qs422016 := string(qb422016.B)
-//line baked_in.qtpl:131
+//line baked_in.qtpl:192
 	qt422016.ReleaseByteBuffer(qb422016)
-//line baked_in.qtpl:131
+//line baked_in.qtpl:192
 	return qs422016
-//line baked_in.qtpl:131
+//line baked_in.qtpl:192
 }

@@ -15,6 +15,12 @@ func init() {
 	validator.MustRegisterValidation("lte", &validator.ValidationRegistration{
 		Func: StreamLte,
 	})
+	validator.MustRegisterValidation("min", &validator.ValidationRegistration{
+		Func: StreamMin,
+	})
+	validator.MustRegisterValidation("max", &validator.ValidationRegistration{
+		Func: StreamMax,
+	})
 	validator.MustRegisterValidation("email", &validator.ValidationRegistration{
 		Func:    StreamEmail,
 		Imports: []*validator.ImportData{},

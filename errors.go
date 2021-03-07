@@ -37,4 +37,6 @@ var (
 	ErrIsDefault     = errors.New("field must have default value")
 	ErrInvalidFormat = errors.New("invalid format")
 	ErrEmail         = errors.Wrap(ErrInvalidFormat, "invalid email")
+	ErrMin           = errors.New("min validation not satisfied")
+	ErrMax           = errors.New("max validation not satisfied")
 )
