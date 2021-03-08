@@ -3,7 +3,26 @@
 {% func Validate(s *validator.StructData) -%}
 
 func (v *{%s s.Struct.Name() %}) Validate() error {
-	verr := make(validator.ValidationErrors, 0)
+	var verr validator.ValidationErrors
+
+	var a interface{} = v
+
+	// Enables custom validation
+	if vv, ok := a.(validator.CustomValidation); ok {
+		err := vv.CustomValidate()
+		// If the returned error is a `ValidationErrors`, jsut set it `verr`.
+		if verr2, ok := err.(validator.ValidationErrors); ok {
+			verr = verr2
+		} else if err != nil {
+			return err
+		}
+	}
+
+	// Checks whether or not the verr is already initialized. In case of a
+	// `CustomValidation` it might happen.
+	if verr == nil {
+		verr = make(validator.ValidationErrors, 0)
+	}
 
 	{%- for _, field := range s.Fields -%}
 		{%- for _, validation := range field.Validations -%}

@@ -9,6 +9,32 @@ import (
 )
 
 var _ = Describe("Validations", func() {
+	Describe("CustomValidation", func() {
+		nameValue := "Snake Eyes"
+
+		It("should validate", func() {
+			data := CustomValidationValidation{
+				Name: nameValue,
+			}
+			Expect(data.Validate()).To(BeNil())
+		})
+
+		It("should fail validating", func() {
+			data := CustomValidationValidation{
+				Name:        nameValue,
+				CustomError: true,
+			}
+			err := data.Validate()
+			Expect(err).To(HaveOccurred())
+			validationErr, ok := err.(validator.ValidationErrors)
+			Expect(ok).To(BeTrue())
+			Expect(validationErr).To(HaveLen(1))
+			Expect(validationErr[0].Field).To(Equal("no field"))
+			Expect(validationErr[0].Rule).To(Equal("custom"))
+			Expect(validationErr[0].Value).To(Equal("any value"))
+		})
+	})
+
 	Describe("Required", func() {
 		nameValue := "S. Eyes"
 		namePtrValue := "S. Eyes Ptr"

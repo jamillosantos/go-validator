@@ -17,8 +17,8 @@ Go struct validation with code generation
 :x: excluded_without_all
 :x: isdefault
 :x: len
-:x: min
-:x: max
+:heavy_check_mark: min
+:heavy_check_mark: max
 :x: eq
 :x: ne
 :x: lt

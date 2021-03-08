@@ -29,29 +29,72 @@ func (v *`)
 	qw422016.E().S(s.Struct.Name())
 //line validate.qtpl:5
 	qw422016.N().S(`) Validate() error {
-	verr := make(validator.ValidationErrors, 0)
+	var verr validator.ValidationErrors
+
+	var a interface{} = v
+
+	// Enables custom validation
+	if vv, ok := a.(validator.CustomValidation); ok {
+		err := vv.CustomValidate()
+		// If the returned error is a `)
+//line validate.qtpl:5
+	qw422016.N().S("`")
+//line validate.qtpl:5
+	qw422016.N().S(`ValidationErrors`)
+//line validate.qtpl:5
+	qw422016.N().S("`")
+//line validate.qtpl:5
+	qw422016.N().S(`, jsut set it `)
+//line validate.qtpl:5
+	qw422016.N().S("`")
+//line validate.qtpl:5
+	qw422016.N().S(`verr`)
+//line validate.qtpl:5
+	qw422016.N().S("`")
+//line validate.qtpl:5
+	qw422016.N().S(`.
+		if verr2, ok := err.(validator.ValidationErrors); ok {
+			verr = verr2
+		} else if err != nil {
+			return err
+		}
+	}
+
+	// Checks whether or not the verr is already initialized. In case of a
+	// `)
+//line validate.qtpl:5
+	qw422016.N().S("`")
+//line validate.qtpl:5
+	qw422016.N().S(`CustomValidation`)
+//line validate.qtpl:5
+	qw422016.N().S("`")
+//line validate.qtpl:5
+	qw422016.N().S(` it might happen.
+	if verr == nil {
+		verr = make(validator.ValidationErrors, 0)
+	}
 
 `)
-//line validate.qtpl:8
+//line validate.qtpl:27
 	for _, field := range s.Fields {
-//line validate.qtpl:9
+//line validate.qtpl:28
 		for _, validation := range field.Validations {
-//line validate.qtpl:10
+//line validate.qtpl:29
 			streamvalidation := validation.Validation.Func
 
-//line validate.qtpl:10
+//line validate.qtpl:29
 			qw422016.N().S(`
 `)
-//line validate.qtpl:11
+//line validate.qtpl:30
 			streamvalidation(qw422016, s, field, validation.Data)
-//line validate.qtpl:11
+//line validate.qtpl:30
 			qw422016.N().S(`
 `)
-//line validate.qtpl:12
+//line validate.qtpl:31
 		}
-//line validate.qtpl:13
+//line validate.qtpl:32
 	}
-//line validate.qtpl:13
+//line validate.qtpl:32
 	qw422016.N().S(`
 	if len(verr) > 0 {
 		return verr
@@ -60,31 +103,31 @@ func (v *`)
 }
 
 `)
-//line validate.qtpl:21
+//line validate.qtpl:40
 }
 
-//line validate.qtpl:21
+//line validate.qtpl:40
 func WriteValidate(qq422016 qtio422016.Writer, s *validator.StructData) {
-//line validate.qtpl:21
+//line validate.qtpl:40
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line validate.qtpl:21
+//line validate.qtpl:40
 	StreamValidate(qw422016, s)
-//line validate.qtpl:21
+//line validate.qtpl:40
 	qt422016.ReleaseWriter(qw422016)
-//line validate.qtpl:21
+//line validate.qtpl:40
 }
 
-//line validate.qtpl:21
+//line validate.qtpl:40
 func Validate(s *validator.StructData) string {
-//line validate.qtpl:21
+//line validate.qtpl:40
 	qb422016 := qt422016.AcquireByteBuffer()
-//line validate.qtpl:21
+//line validate.qtpl:40
 	WriteValidate(qb422016, s)
-//line validate.qtpl:21
+//line validate.qtpl:40
 	qs422016 := string(qb422016.B)
-//line validate.qtpl:21
+//line validate.qtpl:40
 	qt422016.ReleaseByteBuffer(qb422016)
-//line validate.qtpl:21
+//line validate.qtpl:40
 	return qs422016
-//line validate.qtpl:21
+//line validate.qtpl:40
 }

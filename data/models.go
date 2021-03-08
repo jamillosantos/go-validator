@@ -1,5 +1,7 @@
 package data
 
+import "github.com/jamillosantos/go-validator"
+
 type RequiredValidation struct {
 	Name        string  `json:"name"     validate:"required"`
 	NamePointer *string `json:"name_ptr" validate:"required"`
@@ -24,6 +26,20 @@ type MaxValidation struct {
 	Names      []string `json:"names"     validate:"max=3"`
 	Age        int      `json:"age"       validate:"max=35"`
 	AgePointer *int     `json:"age_ptr"   validate:"max=35"`
+}
+
+type CustomValidationValidation struct {
+	Name        string `json:"name"  validate:"required"`
+	CustomError bool
+}
+
+func (v *CustomValidationValidation) CustomValidate() error {
+	if v.CustomError {
+		return validator.ValidationErrors{
+			validator.NewFieldError(validator.ErrInvalidFormat, "custom", "no field", "any value"),
+		}
+	}
+	return nil
 }
 
 // User contains user information

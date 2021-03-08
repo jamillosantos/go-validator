@@ -6,7 +6,26 @@ import (
 )
 
 func (v *RequiredValidation) Validate() error {
-	verr := make(validator.ValidationErrors, 0)
+	var verr validator.ValidationErrors
+
+	var a interface{} = v
+
+	// Enables custom validation
+	if vv, ok := a.(validator.CustomValidation); ok {
+		err := vv.CustomValidate()
+		// If the returned error is a `ValidationErrors`, jsut set it `verr`.
+		if verr2, ok := err.(validator.ValidationErrors); ok {
+			verr = verr2
+		} else if err != nil {
+			return err
+		}
+	}
+
+	// Checks whether or not the verr is already initialized. In case of a
+	// `CustomValidation` it might happen.
+	if verr == nil {
+		verr = make(validator.ValidationErrors, 0)
+	}
 
 
 	if !(func () bool {
@@ -34,7 +53,26 @@ func (v *RequiredValidation) Validate() error {
 
 
 func (v *EmailValidation) Validate() error {
-	verr := make(validator.ValidationErrors, 0)
+	var verr validator.ValidationErrors
+
+	var a interface{} = v
+
+	// Enables custom validation
+	if vv, ok := a.(validator.CustomValidation); ok {
+		err := vv.CustomValidate()
+		// If the returned error is a `ValidationErrors`, jsut set it `verr`.
+		if verr2, ok := err.(validator.ValidationErrors); ok {
+			verr = verr2
+		} else if err != nil {
+			return err
+		}
+	}
+
+	// Checks whether or not the verr is already initialized. In case of a
+	// `CustomValidation` it might happen.
+	if verr == nil {
+		verr = make(validator.ValidationErrors, 0)
+	}
 
 
 	if !(func () bool {
@@ -67,7 +105,26 @@ func (v *EmailValidation) Validate() error {
 
 
 func (v *MinValidation) Validate() error {
-	verr := make(validator.ValidationErrors, 0)
+	var verr validator.ValidationErrors
+
+	var a interface{} = v
+
+	// Enables custom validation
+	if vv, ok := a.(validator.CustomValidation); ok {
+		err := vv.CustomValidate()
+		// If the returned error is a `ValidationErrors`, jsut set it `verr`.
+		if verr2, ok := err.(validator.ValidationErrors); ok {
+			verr = verr2
+		} else if err != nil {
+			return err
+		}
+	}
+
+	// Checks whether or not the verr is already initialized. In case of a
+	// `CustomValidation` it might happen.
+	if verr == nil {
+		verr = make(validator.ValidationErrors, 0)
+	}
 
 
 	if !(func () bool {
@@ -122,7 +179,26 @@ func (v *MinValidation) Validate() error {
 
 
 func (v *MaxValidation) Validate() error {
-	verr := make(validator.ValidationErrors, 0)
+	var verr validator.ValidationErrors
+
+	var a interface{} = v
+
+	// Enables custom validation
+	if vv, ok := a.(validator.CustomValidation); ok {
+		err := vv.CustomValidate()
+		// If the returned error is a `ValidationErrors`, jsut set it `verr`.
+		if verr2, ok := err.(validator.ValidationErrors); ok {
+			verr = verr2
+		} else if err != nil {
+			return err
+		}
+	}
+
+	// Checks whether or not the verr is already initialized. In case of a
+	// `CustomValidation` it might happen.
+	if verr == nil {
+		verr = make(validator.ValidationErrors, 0)
+	}
 
 
 	if !(func () bool {
@@ -176,8 +252,64 @@ func (v *MaxValidation) Validate() error {
 }
 
 
+func (v *CustomValidationValidation) Validate() error {
+	var verr validator.ValidationErrors
+
+	var a interface{} = v
+
+	// Enables custom validation
+	if vv, ok := a.(validator.CustomValidation); ok {
+		err := vv.CustomValidate()
+		// If the returned error is a `ValidationErrors`, jsut set it `verr`.
+		if verr2, ok := err.(validator.ValidationErrors); ok {
+			verr = verr2
+		} else if err != nil {
+			return err
+		}
+	}
+
+	// Checks whether or not the verr is already initialized. In case of a
+	// `CustomValidation` it might happen.
+	if verr == nil {
+		verr = make(validator.ValidationErrors, 0)
+	}
+
+
+	if !(func () bool {
+	return v.Name != ""
+})() {
+		verr = append(verr, validator.NewFieldError(validator.ErrRequired, "required", "name", v.Name))
+	}
+
+
+	if len(verr) > 0 {
+		return verr
+	}
+	return nil
+}
+
+
 func (v *User) Validate() error {
-	verr := make(validator.ValidationErrors, 0)
+	var verr validator.ValidationErrors
+
+	var a interface{} = v
+
+	// Enables custom validation
+	if vv, ok := a.(validator.CustomValidation); ok {
+		err := vv.CustomValidate()
+		// If the returned error is a `ValidationErrors`, jsut set it `verr`.
+		if verr2, ok := err.(validator.ValidationErrors); ok {
+			verr = verr2
+		} else if err != nil {
+			return err
+		}
+	}
+
+	// Checks whether or not the verr is already initialized. In case of a
+	// `CustomValidation` it might happen.
+	if verr == nil {
+		verr = make(validator.ValidationErrors, 0)
+	}
 
 
 	if (func () bool {
@@ -259,7 +391,26 @@ func (v *User) Validate() error {
 
 
 func (v *Address) Validate() error {
-	verr := make(validator.ValidationErrors, 0)
+	var verr validator.ValidationErrors
+
+	var a interface{} = v
+
+	// Enables custom validation
+	if vv, ok := a.(validator.CustomValidation); ok {
+		err := vv.CustomValidate()
+		// If the returned error is a `ValidationErrors`, jsut set it `verr`.
+		if verr2, ok := err.(validator.ValidationErrors); ok {
+			verr = verr2
+		} else if err != nil {
+			return err
+		}
+	}
+
+	// Checks whether or not the verr is already initialized. In case of a
+	// `CustomValidation` it might happen.
+	if verr == nil {
+		verr = make(validator.ValidationErrors, 0)
+	}
 
 
 	if !(func () bool {
