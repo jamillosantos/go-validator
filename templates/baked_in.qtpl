@@ -55,9 +55,7 @@ if field.IsString {
 }
 -%}
 {%- if field.IsArray -%}
-	if len(v.{%s field.Name %}) == 0 {
-		return false
-	}
+	return len(v.{%s field.Name %}) != 0
 {%- else -%}
 	return {%s prefix %}v.{%s field.Name %} != {%= unesc(zero) %}
 {%- endif -%}
